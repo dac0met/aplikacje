@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\Applicants\Schemas;
 
 use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
@@ -40,9 +42,15 @@ class ApplicantForm
                     ->label('Email address')
                     ->email()
                     ->default(null),
-                TextInput::make('consent')
-                    ->default(null),
-                TextInput::make('job_position')
+                
+                Select::make('job_position')
+                    ->multiple()
+                    ->options([
+                        'tailwind' => 'Tailwind CSS',
+                        'alpine' => 'Alpine.js',
+                        'laravel' => 'Laravel',
+                        'livewire' => 'Laravel Livewire',
+                    ])
                     ->default(null),
                 TextInput::make('education')
                     ->default(null),
@@ -52,8 +60,22 @@ class ApplicantForm
                 Textarea::make('field_of_study')
                     ->default(null)
                     ->columnSpanFull(),
-                TextInput::make('english')
+                Select::make('english')
+                    ->options([
+                        'a1' => 'A1',
+                        'a2' => 'A2',
+                        'b1' => 'B1',
+                        'b2' => 'B2',
+                        'c1' => 'C1',
+                        'c2' => 'C2',
+                    ])
+                    ->native(false)
+                    
                     ->default(null),
+
+                TextInput::make('english_rating')
+                    ->default(null),
+
                 TextInput::make('another_lang')
                     ->default(null),
                 TextInput::make('another_level')
@@ -61,9 +83,18 @@ class ApplicantForm
                 Textarea::make('experience')
                     ->default(null)
                     ->columnSpanFull(),
-                TextInput::make('shift_work')
+                Toggle::make('shift_work')
+                    ->onColor('success')
+                    ->offColor('danger')
                     ->required()
                     ->default(''),
+
+                Toggle::make('consent')
+                    ->onColor('success')
+                    ->offColor('danger')
+                    ->required()
+                    ->default(null),
+
                 TextInput::make('salary')
                     ->numeric()
                     ->default(null),
@@ -73,8 +104,7 @@ class ApplicantForm
                     ->default(null),
                 TextInput::make('status')
                     ->default(null),
-                TextInput::make('english_rating')
-                    ->default(null),
+                
                 TextInput::make('info')
                     ->default(null),
                 TextInput::make('sent_to')

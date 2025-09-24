@@ -14,5 +14,6 @@ class JobPosition extends Model
     protected $fillable = [
         'name',
         'filename',
+        'id'
     ];
 }
