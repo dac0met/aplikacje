@@ -83,11 +83,6 @@ class ApplicantsTable
                 ->toggleable(isToggledHiddenByDefault: false)
                 ->sortable(),
 
-            TextColumn::make('consent')
-                ->label('Consent')
-                ->toggleable(isToggledHiddenByDefault: false)
-                ->limit(10),
-
             TextColumn::make('job_position')
                 ->label('Job Position (text)')
                 ->searchable()
@@ -136,6 +131,11 @@ class ApplicantsTable
 
             BooleanColumn::make('shift_work')
                 ->label('Shift Work')
+                ->toggleable(isToggledHiddenByDefault: false)
+                ->sortable(),
+
+            BooleanColumn::make('consent')
+                ->label('Consent')
                 ->toggleable(isToggledHiddenByDefault: false)
                 ->sortable(),
 

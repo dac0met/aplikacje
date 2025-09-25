@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\ConsentSource;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+// use Illuminate\Database\Eloquent\Concerns\HasRelationships;
 
 class Applicant extends Model
 {
+    // use HasRelationships;
     
     /**
      * The attributes that are mass assignable.
@@ -15,6 +19,7 @@ class Applicant extends Model
     protected $fillable = [
         'submission_id',
         'job_position_id',
+        'consent_source_id',
         'submitted_date',
         'user_ip',
         'name',
@@ -44,9 +49,20 @@ class Applicant extends Model
         'feedback',
         'gender',
         'gross',
-        'consent_source',
+        // 'consent_source',
         'notes',
     ];
 
+    public function consentSource() : BelongsTo
+    {
+        return $this->belongsTo(ConsentSource::class);
+    }
+
+    // protected static function booted()
+    // {
+    //     static::creating(function ($applicant) {
+    //         \Log::debug('Applicant data before save', $applicant->attributesToArray());
+    //     });
+    // }
     
 }

@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Resources\Applicants\Schemas;
 
 use Filament\Schemas\Schema;
+use App\Models\ConsentSource;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Textarea;
@@ -16,13 +17,33 @@ class ApplicantForm
     {
         return $schema
             ->components([
+                Select::make('consent_source_id')               // przechowujemy ID rekordu
+                    ->label('Źródło zgody')
+                    ->relationship('consentSource', 'label')   // relacja w modelu (patrz niżej), automatycznie pobiera label
+                    ->searchable()                              // możliwość wyszukiwania
+                    ->placeholder('Wybierz lub wpisz nową wartość')
+                    ->createOptionForm([                        // Formularz, który pojawi się po wpisaniu nowego tekstu
+                        TextInput::make('key')
+                            ->required()
+                            ->unique(table: ConsentSource::class, column: 'key')
+                            ->maxLength(100),
+
+                        TextInput::make('label')
+                            ->required()
+                            ->maxLength(255),
+                    ])
+                    ->createOptionUsing(fn (array $data) =>                         // Zapisujemy nową opcję i zwracamy jej ID, żeby Select ją od razu wybrał
+                         ConsentSource::create($data)->getKey())
+                    ->required(),
+
                 TextInput::make('submission_id')
                     ->numeric()
                     ->default(null),
                 TextInput::make('job_position_id')
                     ->required()
                     ->numeric(),
-                DatePicker::make('submitted_date'),
+                DatePicker::make('submitted_date')
+                    ,
                 TextInput::make('user_ip')
                     ->default(null),
                 TextInput::make('name')
@@ -44,7 +65,7 @@ class ApplicantForm
                     ->default(null),
                 
                 Select::make('job_position')
-                    ->multiple()
+                    // ->multiple() // !!! 
                     ->options([
                         'tailwind' => 'Tailwind CSS',
                         'alpine' => 'Alpine.js',
@@ -78,22 +99,24 @@ class ApplicantForm
 
                 TextInput::make('another_lang')
                     ->default(null),
+
                 TextInput::make('another_level')
                     ->default(null),
+
                 Textarea::make('experience')
                     ->default(null)
                     ->columnSpanFull(),
+
                 Toggle::make('shift_work')
                     ->onColor('success')
                     ->offColor('danger')
-                    ->required()
-                    ->default(''),
+                    ->required(),
 
                 Toggle::make('consent')
                     ->onColor('success')
                     ->offColor('danger')
-                    ->required()
-                    ->default(null),
+                    ->required(),
+
 
                 TextInput::make('salary')
                     ->numeric()
@@ -117,8 +140,7 @@ class ApplicantForm
                     ->default(null),
                 TextInput::make('gross')
                     ->default(null),
-                TextInput::make('consent_source')
-                    ->default(null),
+                
                 TextInput::make('notes')
                     ->default(null),
             ]);
