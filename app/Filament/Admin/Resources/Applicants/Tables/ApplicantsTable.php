@@ -3,10 +3,19 @@
 namespace App\Filament\Admin\Resources\Applicants\Tables;
 
 use Filament\Tables\Table;
+use App\Enums\ProductStatusEnum;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Tables\Filters\Filter;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Columns\BooleanColumn;
 
 class ApplicantsTable
@@ -18,13 +27,6 @@ class ApplicantsTable
                 // Primary key
             TextColumn::make('id')
                 ->label('ID')
-                ->sortable()
-                ->toggleable(isToggledHiddenByDefault: false)
-                ->searchable(),
-
-            // Foreign keys / relations
-            TextColumn::make('submission_id')
-                ->label('Submission ID')
                 ->sortable()
                 ->toggleable(isToggledHiddenByDefault: false)
                 ->searchable(),
@@ -46,6 +48,7 @@ class ApplicantsTable
             // Simple strings / chars
             TextColumn::make('user_ip')
                 ->label('IP')
+                ->numeric()
                 ->toggleable(isToggledHiddenByDefault: false)
                 ->limit(15),
 
@@ -83,8 +86,8 @@ class ApplicantsTable
                 ->toggleable(isToggledHiddenByDefault: false)
                 ->sortable(),
 
-            TextColumn::make('job_position')
-                ->label('Job Position (text)')
+            TextColumn::make('jobposition.name')
+                ->label('Job Position')
                 ->searchable()
                 ->toggleable(isToggledHiddenByDefault: false)
                 ->sortable(),
@@ -132,11 +135,13 @@ class ApplicantsTable
             BooleanColumn::make('shift_work')
                 ->label('Shift Work')
                 ->toggleable(isToggledHiddenByDefault: false)
+                ->alignCenter()
                 ->sortable(),
 
             BooleanColumn::make('consent')
                 ->label('Consent')
                 ->toggleable(isToggledHiddenByDefault: false)
+                ->alignCenter()
                 ->sortable(),
 
             TextColumn::make('salary')
@@ -214,14 +219,45 @@ class ApplicantsTable
                 ->sortable(),
             ])
             ->filters([
-                //
-            ])
+                SelectFilter::make('position')
+                    ->relationship('jobposition','name'),
+
+                Filter::make('created_from')
+                    ->schema([
+                        DatePicker::make('created_from'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['created_from'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('submitted_date', '>=', $date),
+                            );
+                    }),
+
+                Filter::make('created_until')
+                    ->schema([
+                        DatePicker::make('created_until'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['created_until'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('submitted_date', '<=', $date),
+                            );
+                    }),
+            ], layout: FiltersLayout::AboveContent)
+
             ->recordActions([
-                EditAction::make(),
+                ActionGroup::make([ 
+                    ViewAction::make(),
+                    EditAction::make(),
+                    DeleteAction::make(),
+                ])
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    
                 ]),
             ]);
     }

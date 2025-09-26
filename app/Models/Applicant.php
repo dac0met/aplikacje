@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\JobPosition;
 use App\Models\ConsentSource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,7 +18,6 @@ class Applicant extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'submission_id',
         'job_position_id',
         'consent_source_id',
         'submitted_date',
@@ -56,6 +56,11 @@ class Applicant extends Model
     public function consentSource() : BelongsTo
     {
         return $this->belongsTo(ConsentSource::class);
+    }
+
+    public function jobPosition() : BelongsTo
+    {
+        return $this->belongsTo(JobPosition::class);
     }
 
     // protected static function booted()

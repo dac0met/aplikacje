@@ -2,9 +2,10 @@
 
 namespace App\Filament\Admin\Resources\Applicants\Pages;
 
-use App\Filament\Admin\Resources\Applicants\ApplicantResource;
-use Filament\Actions\DeleteAction;
+use Filament\Support\Enums\Width;
+// use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use App\Filament\Admin\Resources\Applicants\ApplicantResource;
 
 class EditApplicant extends EditRecord
 {
@@ -13,7 +14,12 @@ class EditApplicant extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            DeleteAction::make(),
+            // DeleteAction::make(),
         ];
+    }
+
+    public function getMaxContentWidth(): ?string
+    {
+        return Width::Full->value;   
     }
 }
