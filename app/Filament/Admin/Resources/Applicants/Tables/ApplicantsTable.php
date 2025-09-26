@@ -66,7 +66,7 @@ class ApplicantsTable
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
 
-                TextColumn::make('consent_source')
+                TextColumn::make('consentsource.label')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),

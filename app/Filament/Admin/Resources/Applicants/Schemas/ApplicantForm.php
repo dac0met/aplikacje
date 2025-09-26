@@ -103,7 +103,6 @@ class ApplicantForm
                             ->label('Position')
                             ->columnspan(6)
                             ->relationship('jobPosition','name')
-                            // ->columnSpan(2)
                             ->default(null),
 
                         TextInput::make('education')
