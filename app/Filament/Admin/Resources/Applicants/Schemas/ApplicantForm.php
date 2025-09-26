@@ -33,8 +33,11 @@ class ApplicantForm
                 Fieldset::make('')->columnSpan('full')
                     ->columns(12)
                     ->schema([
+                        DatePicker::make('submitted_date')
+                            ->columnspan(2),
+
                         TextInput::make('name')
-                            ->columnspan(5)
+                            ->columnspan(4)
                             ->required(),
 
                         TextInput::make('surname')
@@ -44,20 +47,16 @@ class ApplicantForm
                         Radio::make('gender')
                             ->columnspan(2)
                             ->options([
-                                'k' => 'woman',
-                                'm' => 'mman'
+                                'woman' => 'Woman',
+                                'man' => 'Man'
                             ])
+                            ->inline()
                             ->default(null),
                         
                         TextInput::make('yob')
                             ->columnspan(1)
                             ->mask('9999')
                             ->default(null),
-
-                        DatePicker::make('submitted_date')
-                            ->columnspan(2)
-                            // ->format('Y-m-d')
-                            ,
 
                         Select::make('consent_source_id')               // przechowujemy ID rekordu
                             ->label('Source of consent')
@@ -92,8 +91,13 @@ class ApplicantForm
 
                         TextInput::make('phone')
                             ->columnspan(2)
-                            ->rule('tel')
+                            ->tel()
+                            ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/')
                             ->default(null),
+                        
+                        // TextInput::configureUsing(function (TextInput $component): void {
+                        //     $component->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/');
+                        // }),
                         
                         Select::make('job_position_id') 
                             ->label('Position')
@@ -117,6 +121,7 @@ class ApplicantForm
                             ->default(null),
 
                         Select::make('english')
+                            ->columnspan(2)                        
                             ->options([
                                 'a1' => 'A1',
                                 'a2' => 'A2',
@@ -126,7 +131,6 @@ class ApplicantForm
                                 'c2' => 'C2',
                             ])
                             ->native(false)
-                            ->columnspan(2)
                             ->default(null),
                         
                         TextInput::make('english_rating')
@@ -144,13 +148,14 @@ class ApplicantForm
                         TextInput::make('salary')
                             ->columnspan(1)
                             ->numeric()
+                            ->step(100)
                             ->default(null),
 
                         Radio::make('gross')
-                            ->columnspan(1)
+                            // ->columnspan(2)
                             ->options([
-                                'b' => 'brutto',
-                                'n' => 'netto'
+                                'brutto' => 'Brutto',
+                                'netto' => 'Netto'
                             ])
                             ->default(null),
 
