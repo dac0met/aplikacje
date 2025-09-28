@@ -1,0 +1,129 @@
+
+{{-- resources/views/livewire/applicant-form.blade.php --}}
+{{-- Cały formularz opakowany w kartę z Tailwind --}}
+<div class="bg-white shadow-md rounded-lg p-6">
+
+
+
+    {{-- Formularz – submit wywołuje metodę submit() w komponencie --}}
+    <form wire:submit.prevent="submit" class="space-y-6">
+
+        {{-- ===== Dane osobowe ===== --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block font-medium text-sm text-gray-700" for="name">
+                    Imię
+                </label>
+                <input id="name" type="text"
+                       wire:model.defer="name"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                       autocomplete="given-name">
+                @error('name') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+            </div>
+
+            <div>
+                <label class="block font-medium text-sm text-gray-700" for="surname">
+                    Nazwisko
+                </label>
+                <input id="surname" type="text"
+                       wire:model.defer="surname"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                       autocomplete="family-name">
+                @error('surname') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block font-medium text-sm text-gray-700" for="yob">
+                    Rok urodzenia
+                </label>
+                <input id="yob" type="number" min="1900" max="{{ now()->year }}"
+                       wire:model.defer="yob"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                @error('yob') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+            </div>
+
+            <div>
+                <label class="block font-medium text-sm text-gray-700" for="city">
+                    Miasto
+                </label>
+                <input id="city" type="text"
+                       wire:model.defer="city"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                @error('city') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+            </div>
+        </div>
+
+        {{-- ===== Kontakt ===== --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block font-medium text-sm text-gray-700" for="email">
+                    E‑mail
+                </label>
+                <input id="email" type="email"
+                       wire:model.defer="email"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                @error('email') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+            </div>
+
+            <div>
+                <label class="block font-medium text-sm text-gray-700" for="phone">
+                    Telefon
+                </label>
+                <input id="phone" type="text"
+                       wire:model.defer="phone"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                @error('phone') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+            </div>
+        </div>
+
+
+        {{-- ===== Stanowisko ===== --}}
+        <div>
+            <label class="block font-medium text-sm text-gray-700" for="job_position_id">
+                Stanowisko
+            </label>
+            <select id="job_position_id"
+                    wire:model="job_position_id"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <option value="">— brak —</option>
+                @foreach($jobPositions as $id => $name)
+                    <option value="{{ $id }}">{{ $name }}</option>
+                @endforeach
+            </select>
+            @error('job_position_id') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+        </div>
+
+        {{-- ===== Praca zmianowa (checkbox) ===== --}}
+        <div class="flex items-center">
+            <input id="shift_work" type="checkbox"
+                   wire:model="shift_work"
+                   class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+            <label for="shift_work" class="ml-2 block text-sm text-gray-900">
+                Praca zmianowa
+            </label>
+            @error('shift_work') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+        </div>
+
+         {{-- Komunikat sukcesu po zapisaniu (flash) --}}
+        @if (session()->has('message'))
+            <div class="mb-4 p-4 bg-green-100 text-green-800 rounded">
+                {{ session('message') }}
+            </div>
+        @endif
+
+        {{-- ===== Przycisk wysyłki ===== --}}
+        <div class="flex justify-end pt-4 border-t border-gray-200">
+            <button type="submit"
+                    {{-- class="px-6 py-2 bg-green-600
+                     text-white rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"> --}}
+                    class="inline-flex items-center px-6 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700
+                     focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-150 z-60"
+                    wire:loading.attr="disabled" wire:target="submit" >
+                Wyślij
+            </button>
+        </div>
+    </form>
+
+</div>

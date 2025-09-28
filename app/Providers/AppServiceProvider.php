@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+// use Livewire\Livewire;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+// use App\Livewire\ApplicantFormComponent;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,5 +23,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Schema::defaultStringLength(191);
+        // Livewire::component('applicant-form-component', ApplicantFormComponent::class);
     }
 }
