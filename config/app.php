@@ -82,6 +82,9 @@ return [
 
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'pl'),
 
+    // Lista obsługiwanych języków (opcjonalnie, przydatna przy middleware)
+    'available_locales' => ['en', 'pl'],
+
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
 
     /*

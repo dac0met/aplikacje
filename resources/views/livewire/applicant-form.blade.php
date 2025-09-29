@@ -12,7 +12,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <label class="block font-medium text-sm text-gray-700" for="name">
-                    Imię
+                    First name
                 </label>
                 <input id="name" type="text"
                        wire:model.defer="name"
@@ -23,7 +23,7 @@
 
             <div>
                 <label class="block font-medium text-sm text-gray-700" for="surname">
-                    Nazwisko
+                    Last name
                 </label>
                 <input id="surname" type="text"
                        wire:model.defer="surname"
@@ -36,7 +36,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <label class="block font-medium text-sm text-gray-700" for="yob">
-                    Rok urodzenia
+                    Year of birth
                 </label>
                 <input id="yob" type="number" min="1900" max="{{ now()->year }}"
                        wire:model.defer="yob"
@@ -46,7 +46,7 @@
 
             <div>
                 <label class="block font-medium text-sm text-gray-700" for="city">
-                    Miasto
+                    Place of residence ( City )
                 </label>
                 <input id="city" type="text"
                        wire:model.defer="city"
@@ -69,7 +69,7 @@
 
             <div>
                 <label class="block font-medium text-sm text-gray-700" for="phone">
-                    Telefon
+                    Phone number in the Polish zone
                 </label>
                 <input id="phone" type="text"
                        wire:model.defer="phone"
@@ -82,12 +82,12 @@
         {{-- ===== Stanowisko ===== --}}
         <div>
             <label class="block font-medium text-sm text-gray-700" for="job_position_id">
-                Stanowisko
+                Position applied for
             </label>
             <select id="job_position_id"
                     wire:model="job_position_id"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                <option value="">— brak —</option>
+                <option value="">-</option>
                 @foreach($jobPositions as $id => $name)
                     <option value="{{ $id }}">{{ $name }}</option>
                 @endforeach
@@ -101,7 +101,7 @@
                    wire:model="shift_work"
                    class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
             <label for="shift_work" class="ml-2 block text-sm text-gray-900">
-                Praca zmianowa
+                Willingness to work in shifts
             </label>
             @error('shift_work') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
         </div>
@@ -121,7 +121,7 @@
                     class="inline-flex items-center px-6 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700
                      focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-150 z-60"
                     wire:loading.attr="disabled" wire:target="submit" >
-                Wyślij
+                Send
             </button>
         </div>
     </form>
