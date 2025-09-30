@@ -16,9 +16,13 @@ class ApplicantFormComponent extends Component
     public $yob;
     public $new_consent_label;
     public $city;
-    public $email;
     public $phone;
+    public $email;
     public $job_position_id;
+    public $education;
+    public $university;
+    public $field_of_study;
+    public $english;
     public $shift_work = false;
 
     // kontrola widoczności modala
@@ -28,13 +32,18 @@ class ApplicantFormComponent extends Component
     protected function rules(): array
     {
         return [
-            'name'               => ['required', 'string', 'max:191'],
-            'surname'            => ['required', 'string', 'max:191'],
+            'name'               => ['required', 'string', 'max:30'],
+            'surname'            => ['required', 'string', 'max:30'],
             'yob'                => ['nullable', 'digits:4'],
-            'city'               => ['nullable', 'string', 'max:191'],
-            'email'              => ['nullable', 'email', 'max:191'],
+            'city'               => ['nullable', 'string', 'max:30'],
             'phone'              => ['nullable', 'string', 'max:30'],
+            'email'              => ['nullable', 'email', 'max:50'],
             'job_position_id'    => ['nullable', 'exists:job_positions,id'],
+            'education'          => ['required', 'string', 'max:30'],
+            'university'         => ['required', 'string', 'max:191'],
+            'field_of_study'     => ['required', 'string', 'max:191'],
+            'english'            => ['required'],
+            'another_lang'       => ['nullable', 'string', 'max:191'],
             'shift_work'         => ['required', 'boolean'],
         ];
     }
@@ -49,11 +58,15 @@ class ApplicantFormComponent extends Component
             'name'               => $this->name,
             'surname'            => $this->surname,
             'yob'                => $this->yob,
-                // 'consent_source_id'  => $this->consent_source_id,
             'city'               => $this->city,
-            'email'              => $this->email,
             'phone'              => $this->phone,
+            'email'              => $this->email,
             'job_position_id'    => $this->job_position_id,
+            'education'          => $this->education,
+            'university'         => $this->university,
+            'field_of_study'     => $this->field_of_study,
+            'english'            => $this->english,
+            'another_lang'       => $this->another_lang,
             'shift_work'         => $this->shift_work,
         ]);
 
@@ -68,9 +81,13 @@ class ApplicantFormComponent extends Component
             'surname',
             'yob',
             'city',
-            'email',
             'phone',
+            'email',
             'job_position_id',
+            'education',
+            'university',
+            'field_of_study',
+            'english',
             'shift_work',
         ]);
     }

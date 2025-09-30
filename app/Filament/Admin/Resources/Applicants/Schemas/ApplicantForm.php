@@ -83,17 +83,18 @@ class ApplicantForm
                             ->columnspan(6)
                             ->default(null),
 
+                        TextInput::make('phone')
+                            ->columnspan(2)
+                            ->tel()
+                            ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/')
+                            ->default(null),
+                            
                         TextInput::make('email')
                             ->label('Email address')
                             ->columnspan(4)
                             ->email()
                             ->default(null),
 
-                        TextInput::make('phone')
-                            ->columnspan(2)
-                            ->tel()
-                            ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/')
-                            ->default(null),
                         
                         // TextInput::configureUsing(function (TextInput $component): void {
                         //     $component->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/');

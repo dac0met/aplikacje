@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,10 +15,12 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'jarek',
-            'email' => 'jarek@dacomet.pl',
-            'is_admin' => 1,
+        $this->call([
+            UsersSeeder::class,
+            JobPositionsSeeder::class,
+            ConsentSourceSeeder::class,
+            ApplicantSeeder::class,
         ]);
+
     }
 }

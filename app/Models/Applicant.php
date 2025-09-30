@@ -4,13 +4,14 @@ namespace App\Models;
 
 use App\Models\JobPosition;
 use App\Models\ConsentSource;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 // use Illuminate\Database\Eloquent\Concerns\HasRelationships;
 
 class Applicant extends Model
 {
-    // use HasRelationships;
+    use HasFactory; // HasRelationships;
     
     /**
      * The attributes that are mass assignable.
@@ -18,7 +19,6 @@ class Applicant extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'job_position_id',
         'consent_source_id',
         'submitted_date',
         'user_ip',
@@ -29,7 +29,6 @@ class Applicant extends Model
         'phone',
         'email',
         'consent',
-        'job_position',
         'education',
         'university',
         'field_of_study',
@@ -49,7 +48,6 @@ class Applicant extends Model
         'feedback',
         'gender',
         'gross',
-        // 'consent_source',
         'notes',
     ];
 
