@@ -11,9 +11,7 @@ class ConsentSourceForm
     {
         return $schema
             ->components([
-                TextInput::make('key')
-                    ->required(),
-                TextInput::make('label')
+                TextInput::make('name')
                     ->required(),
             ]);
     }

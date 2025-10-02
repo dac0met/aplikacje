@@ -15,14 +15,14 @@ class ConsentSourcesTable
     {
         return $table
             ->columns([
-                TextColumn::make('key')
+                TextColumn::make('name')
                     ->searchable(),
-                TextColumn::make('label')
-                    ->searchable(),
+
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                    
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()

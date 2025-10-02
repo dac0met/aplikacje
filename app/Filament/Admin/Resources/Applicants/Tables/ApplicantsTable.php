@@ -54,38 +54,14 @@ class ApplicantsTable
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
-                TextColumn::make('orig_filename_pl')
-                    ->label('CV Filename pl')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(),
-                TextColumn::make('orig_filename_gb')
-                    ->label('CV Filename gb')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(),    
-                TextColumn::make('cv_pl')
-                    // ->getStateUsing(fn (array $record): string => $record['name'] . ' ' . $record['surname'])
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-
-                TextColumn::make('cv_gb')
-                    // ->getStateUsing(fn (array $record): string => $record['name'] . ' ' . $record['surname'])
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-
-                TextColumn::make('gender')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(),
-
+                
                 TextColumn::make('yob')
                     ->label('Year of Birth')
                     // ->mask('9999')
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
 
-                TextColumn::make('consentsource.label')
+                TextColumn::make('consentsource.name')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
@@ -182,6 +158,33 @@ class ApplicantsTable
                     ->limit(80)
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: false)
+                    ->sortable(),
+
+                TextColumn::make('orig_filename_pl')
+                    ->label('CV Filename pl')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+
+                TextColumn::make('orig_filename_gb')
+                    ->label('CV Filename gb')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),    
+
+                TextColumn::make('cv_pl')
+                    // ->getStateUsing(fn (array $record): string => $record['name'] . ' ' . $record['surname'])
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('cv_gb')
+                    // ->getStateUsing(fn (array $record): string => $record['name'] . ' ' . $record['surname'])
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('gender')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
 
                 TextColumn::make('status')

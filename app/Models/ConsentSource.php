@@ -9,7 +9,7 @@ class ConsentSource extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['key', 'label'];
+    protected $fillable = ['name'];
 
     
 

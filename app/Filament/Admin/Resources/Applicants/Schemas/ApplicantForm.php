@@ -66,25 +66,31 @@ class ApplicantForm
                             ->mask('9999')
                             ->default(null),
 
-                        Select::make('consent_source_id')               // przechowujemy ID rekordu
+                        Select::make('consent_source_id')
                             ->label('Source of consent')
                             ->columnspan(4)
-                            ->relationship('consentSource', 'label')   // relacja w modelu (patrz niżej), automatycznie pobiera label
-                            // ->searchable()                              // możliwość wyszukiwania
-                            ->placeholder('Select or enter a new value')
-                            ->createOptionForm([                        // Formularz, który pojawi się po wpisaniu nowego tekstu
-                                TextInput::make('key')
-                                    ->required()
-                                    ->unique(table: ConsentSource::class, column: 'key')
-                                    ->maxLength(100),
+                            ->relationship('ConsentSource','name')
+                            ->default(null),
 
-                                TextInput::make('label')
-                                    ->required()
-                                    ->maxLength(255),
-                            ])
-                            ->createOptionUsing(fn (array $data) =>                         // Zapisujemy nową opcję i zwracamy jej ID, żeby Select ją od razu wybrał
-                                ConsentSource::create($data)->getKey())
-                            ->required(),
+                        // Select::make('consent_source_id')               // przechowujemy ID rekordu
+                        //     ->label('Source of consent')
+                        //     ->columnspan(4)
+                        //     ->relationship('consentSource', 'label')   // relacja w modelu (patrz niżej), automatycznie pobiera label
+                        //     // ->searchable()                              // możliwość wyszukiwania
+                        //     ->placeholder('Select or enter a new value')
+                        //     ->createOptionForm([                        // Formularz, który pojawi się po wpisaniu nowego tekstu
+                        //         TextInput::make('key')
+                        //             ->required()
+                        //             ->unique(table: ConsentSource::class, column: 'key')
+                        //             ->maxLength(100),
+
+                        //         TextInput::make('label')
+                        //             ->required()
+                        //             ->maxLength(255),
+                        //     ])
+                        //     ->createOptionUsing(fn (array $data) =>                         // Zapisujemy nową opcję i zwracamy jej ID, żeby Select ją od razu wybrał
+                        //         ConsentSource::create($data)->getKey())
+                        //     ->required(),
 
 
                         TextInput::make('city')
@@ -103,15 +109,12 @@ class ApplicantForm
                             ->email()
                             ->default(null),
 
-
-                        // TextInput::configureUsing(function (TextInput $component): void {
-                        //     $component->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/');
-                        // }),
-
                         Select::make('job_position_id')
                             ->label('Position')
                             ->columnspan(6)
                             ->relationship('jobPosition','name')
+                            // ->multiple()
+                            ->preload()
                             ->default(null),
 
                         TextInput::make('education')
@@ -174,7 +177,6 @@ class ApplicantForm
                         Radio::make('consent')
                             ->label('Consent to recruitment')
                             ->columnspan(2)
-                            // ->inline()
                             ->options([
                                 'current' => 'Current',
                                 'future' => 'Current and Future',
@@ -217,15 +219,6 @@ class ApplicantForm
                             ->columns(1)
                             ->multiple(false)
                             ->storeFileNamesIn('orig_filename_gb')
-                            // ->preserveFilenames(true)
-                            // ->previewable(true)
-                            // ->getUploadedFileNameForStorageUsing(function ($file) {
-                            //     // Generujemy unikalną nazwę pliku, np. dodając timestamp
-                            //     $timestamp = now()->timestamp;
-                            //     $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                            //     $extension = $file->getClientOriginalExtension();
-                            //     return $timestamp . '_' . $originalName . '.' . $extension;
-                            // })
                             ->downloadable()
                             ->acceptedFileTypes([
                                 'application/pdf',
@@ -244,19 +237,11 @@ class ApplicantForm
                     ->columns(2)
                     ->schema([
                         Textarea::make('experience')
-                            ->default(null)
-                            // ->columnSpanFull(),
-                            // ->columnSpan(2)
-                            ,
+                            ->default(null),
 
                         Textarea::make('notes')
                             ->default(null),
-                    ]),
 
-
-            // *******  obszar 3    ***********************************************
-                Fieldset::make('')->columnSpan('full')
-                    ->schema([
                         TextInput::make('status')
                             ->default(null),
 
