@@ -2,16 +2,22 @@
 
 namespace App\Filament\Admin\Resources\Applicants\Schemas;
 
+use Filament\Forms\Form;
+use Filament\Actions\Action;
 use Filament\Schemas\Schema;
 use App\Models\ConsentSource;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Textarea;
+use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Component;
 use Filament\Forms\Components\DateTimePicker;
 
 class ApplicantForm
@@ -23,11 +29,13 @@ class ApplicantForm
                 Fieldset::make('')->columnSpan('full')
                     ->columns(8)
                     ->schema([
-                    TextInput::make('user_ip')
-                        ->columnspan(1)
-                        ->readOnly(true)
-                        ->rule('ipv4'),
-                ]),
+                        TextInput::make('user_ip')
+                            ->columnspan(1)
+                            ->readOnly(true)
+                            ->rule('ipv4'),
+                        TextInput::make('id')
+                            ->readOnly(true),
+                    ]),
 
             // *******  obszar 1    ***********************************************
                 Fieldset::make('')->columnSpan('full')
@@ -47,12 +55,12 @@ class ApplicantForm
                         Radio::make('gender')
                             ->columnspan(2)
                             ->options([
-                                'woman' => 'Woman',
-                                'man' => 'Man'
+                                'female' => 'Female',
+                                'male' => 'Male'
                             ])
                             ->inline()
                             ->default(null),
-                        
+
                         TextInput::make('yob')
                             ->columnspan(1)
                             ->mask('9999')
@@ -78,7 +86,7 @@ class ApplicantForm
                                 ConsentSource::create($data)->getKey())
                             ->required(),
 
-                        
+
                         TextInput::make('city')
                             ->columnspan(6)
                             ->default(null),
@@ -88,19 +96,19 @@ class ApplicantForm
                             ->tel()
                             ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/')
                             ->default(null),
-                            
+
                         TextInput::make('email')
                             ->label('Email address')
                             ->columnspan(4)
                             ->email()
                             ->default(null),
 
-                        
+
                         // TextInput::configureUsing(function (TextInput $component): void {
                         //     $component->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/');
                         // }),
-                        
-                        Select::make('job_position_id') 
+
+                        Select::make('job_position_id')
                             ->label('Position')
                             ->columnspan(6)
                             ->relationship('jobPosition','name')
@@ -112,16 +120,14 @@ class ApplicantForm
 
                         TextInput::make('university')
                             ->columnspan(4)
-                            ->default(null)
-                            // ->columnSpan(2)
-                            ,
+                            ->default(null),
 
                         TextInput::make('field_of_study')
                             ->columnSpan(4)
                             ->default(null),
 
                         Select::make('english')
-                            ->columnspan(2)                        
+                            ->columnspan(2)
                             ->options([
                                 'a1' => 'A1',
                                 'a2' => 'A2',
@@ -132,7 +138,7 @@ class ApplicantForm
                             ])
                             ->native(false)
                             ->default(null),
-                        
+
                         TextInput::make('english_rating')
                             ->columnspan(2)
                             ->default(null),
@@ -160,8 +166,6 @@ class ApplicantForm
                             ->default(null),
 
                         Radio::make('shift_work')
-                            // ->onColor('success')
-                            // ->offColor('danger')
                             ->boolean()
                             ->default(false)
                             ->inline(false)
@@ -174,24 +178,70 @@ class ApplicantForm
                             ->options([
                                 'current' => 'Current',
                                 'future' => 'Current and Future',
-                            ])
-                            // ->inline(false),
-                            ,
-
-
-                        TextInput::make('cv_pl')
-                            ->columnspan(4)
-                            ->default(null),
-
-                        TextInput::make('cv_gb')
-                            ->columnspan(4)
-                            ->default(null),
-
+                            ]),
                 ]),
+
+            // *******  obszar plików CV  ***********************************************
+                Fieldset::make('')->columnSpan('full')
+                    ->columns(2)
+                    ->schema([
+
+                //  PL – polska wersja CV
+                // ------------------------------
+                        FileUpload::make('cv_pl')
+                            ->columns(1)
+                            ->multiple(false)
+                            ->storeFileNamesIn('orig_filename_pl')
+                            // ->preserveFilenames(true)
+                            // ->getUploadedFileNameForStorageUsing(function ($file) {
+                            //     // Generujemy unikalną nazwę pliku, np. dodając timestamp
+                            //     $timestamp = now()->timestamp;
+                            //     $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                            //     $extension = $file->getClientOriginalExtension();
+                            //     return $timestamp . '_' . $originalName . '.' . $extension;
+                            // })
+                            ->downloadable()
+                            ->acceptedFileTypes([
+                                'application/pdf',
+                                'application/msword',
+                                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                'application/vnd.oasis.opendocument.text',
+                            ])
+                            ->disk('local')
+                            ->directory('pl')
+                            ->visibility('private'),
+
+                //   GB – angielska wersja CV
+                // ----------------------------------
+                        FileUpload::make('cv_gb')
+                            ->columns(1)
+                            ->multiple(false)
+                            ->storeFileNamesIn('orig_filename_gb')
+                            // ->preserveFilenames(true)
+                            // ->previewable(true)
+                            // ->getUploadedFileNameForStorageUsing(function ($file) {
+                            //     // Generujemy unikalną nazwę pliku, np. dodając timestamp
+                            //     $timestamp = now()->timestamp;
+                            //     $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                            //     $extension = $file->getClientOriginalExtension();
+                            //     return $timestamp . '_' . $originalName . '.' . $extension;
+                            // })
+                            ->downloadable()
+                            ->acceptedFileTypes([
+                                'application/pdf',
+                                'application/msword',
+                                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                'application/vnd.oasis.opendocument.text',
+                            ])
+                            ->disk('local')
+                            ->directory('gb')
+                            ->visibility('private')
+                    ]),
 
 
             // *******  obszar 2    ***********************************************
-                Fieldset::make('')->columnSpan('full')  
+                Fieldset::make('')->columnSpan('full')
+                    ->columns(2)
                     ->schema([
                         Textarea::make('experience')
                             ->default(null)
@@ -215,13 +265,12 @@ class ApplicantForm
 
                         TextInput::make('feedback')
                             ->default(null),
-                                        
+
                         TextInput::make('interview')
                             ->default(null),
                 ]),
 
-                
-                
+
             ])
         ;
     }

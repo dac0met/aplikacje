@@ -27,20 +27,22 @@ return new class extends Migration
             $table->string('education', 30)->nullable();
             $table->string('university',191)->nullable();
             $table->string('field_of_study',191)->nullable();
-            $table->char('english', 15)->nullable();
+            $table->string('english', 2)->nullable();
             $table->string('another_lang', 30)->nullable();
-            $table->char('another_level', 30)->nullable();
+            $table->string('another_level', 2)->nullable();
             $table->string('experience')->nullable();
             $table->boolean('shift_work')->default(0);
             $table->integer('salary')->nullable();			//oczekiwania finansowe
             $table->string('cv_pl', 150)->nullable();
             $table->string('cv_gb', 150)->nullable();
+            $table->string('orig_filename_pl', 150)->nullable();
+            $table->string('orig_filename_gb', 150)->nullable();
             $table->string('status', 20)->nullable();
             $table->string('english_rating', 15)->nullable();
             $table->string('sent_to', 50)->nullable();
             $table->string('interview', 191)->nullable();
             $table->string('feedback', 191)->nullable();
-            $table->string('gender', 9)->nullable();		// płeć
+            $table->string('gender', 6)->nullable();		// płeć
             $table->string('gross', 6)->nullable();		// brutto/netto
             $table->string('notes', 191)->nullable();
             $table->timestamps();

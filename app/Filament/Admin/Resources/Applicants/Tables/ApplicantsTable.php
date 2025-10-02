@@ -54,6 +54,25 @@ class ApplicantsTable
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
+                TextColumn::make('orig_filename_pl')
+                    ->label('CV Filename pl')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+                TextColumn::make('orig_filename_gb')
+                    ->label('CV Filename gb')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),    
+                TextColumn::make('cv_pl')
+                    // ->getStateUsing(fn (array $record): string => $record['name'] . ' ' . $record['surname'])
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('cv_gb')
+                    // ->getStateUsing(fn (array $record): string => $record['name'] . ' ' . $record['surname'])
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('gender')
                     ->searchable()
@@ -148,27 +167,10 @@ class ApplicantsTable
                     ->alignCenter()
                     ->sortable(),
 
-                BooleanColumn::make('consent')
-                    ->label('Consent')
+                TextColumn::make('consent')
+                    ->label('Consent to recruitment')
                     ->toggleable(isToggledHiddenByDefault: false)
-                    ->alignCenter()
                     ->sortable(),
-
-
-
-                // TextColumn::make('cv_pl')
-                //     ->label('CV (PL)')
-                //     ->url(fn ($record) => storage_path('app/' . $record->cv_pl))
-                //     ->openUrlInNewTab()
-                //     ->toggleable(isToggledHiddenByDefault: false)
-                //     ->sortable(),
-
-                // TextColumn::make('cv_gb')
-                    // ->label('CV (GB)')
-                    // ->url(fn ($record) => storage_path('app/' . $record->cv_gb))
-                    // ->openUrlInNewTab()
-                    // ->toggleable(isToggledHiddenByDefault: false)
-                    // ->sortable(),
 
                 TextColumn::make('experience')
                     ->limit(80)

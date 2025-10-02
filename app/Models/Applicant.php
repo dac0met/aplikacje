@@ -40,6 +40,8 @@ class Applicant extends Model
         'salary',
         'cv_pl',
         'cv_gb',
+        'orig_filename_pl',
+        'orig_filename_gb',
         'status',
         'english_rating',
         'info',

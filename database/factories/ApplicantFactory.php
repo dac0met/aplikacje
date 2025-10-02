@@ -17,7 +17,10 @@ class ApplicantFactory extends Factory
     {
         // Lista przykładowych języków i poziomów
         $languages = ['Dutch', 'Polish', 'German', 'Spanish', 'French'];
-        $levels    = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+        $levels    = ['a1', 'a2', 'b1', 'b2', 'c1', 'c2'];
+        $ratings   = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+        $salary = [5000, 5500, 6000, 6500, 12000, 7200, 9600,7700, 8500, 4500];
 
         // Generujemy losowy numer telefonu (międzynarodowy format)
         $phone = $this->faker->unique()->numberBetween(500000000, 799999999);
@@ -33,24 +36,26 @@ class ApplicantFactory extends Factory
             'city'             => $this->faker->city,
             'phone'            => $phone,
             'email'            => $this->faker->unique()->safeEmail,
-            'consent'          => $this->faker->randomElement(['yes', 'no']),
+            'consent'          => $this->faker->randomElement(['current', 'future']),
+            // 'consent'          => $this->faker->randomElement(['yes', 'no']),
             'education'        => $this->faker->randomElement(['High School', 'Bachelor', 'Master', 'PhD']),
             'university'       => $this->faker->company . ' University',
             'field_of_study'   => $this->faker->word,
             'english'          => $this->faker->randomElement($levels),
-            'another_lang'     => $this->faker->randomElement(array_diff($languages, ['German'])),
-            'another_level'    => $this->faker->randomElement($levels),
+            'english_rating'   => $this->faker->randomElement($ratings),
+            'another_lang'     => $this->faker->randomElement(array_diff($languages, ['Polish'])),
+            'another_level'    => $this->faker->randomElement($ratings),
             'experience'       => $this->faker->sentence(8),
             'shift_work'       => $this->faker->boolean,
-            'salary'           => $this->faker->numberBetween(5000, 120000),
-            'cv_pl'            => $this->faker->url,
-            'cv_gb'            => $this->faker->url,
+            'salary'           => $this->faker->randomElement($salary),
+            // 'salary'           => $this->faker->numberBetween(5000, 12000),
+            // 'cv_pl'            => $this->faker->url,
+            // 'cv_gb'            => $this->faker->url,
             'status'           => $this->faker->randomElement(['new', 'reviewed', 'interviewed', 'hired', 'rejected']),
-            'english_rating'   => $this->faker->randomElement($levels),
             'sent_to'          => $this->faker->email,
             'interview'        => $this->faker->optional()->sentence(),
             'feedback'         => $this->faker->optional()->sentence(),
-            'gender'           => $this->faker->randomElement(['male', 'female']),
+            'gender'           => $this->faker->randomElement(['Male', 'Female']),
             'gross'            => $this->faker->randomElement(['brutto', 'netto']),
             'notes'            => $this->faker->sentence(12),
         ];

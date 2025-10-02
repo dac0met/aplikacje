@@ -47,4 +47,6 @@ class ApplicantResource extends Resource
             'edit' => EditApplicant::route('/{record}/edit'),
         ];
     }
+
+
 }
