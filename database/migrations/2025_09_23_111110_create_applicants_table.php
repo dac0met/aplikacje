@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('consent_source_id')->constrained()->cascadeOnDelete()->nullable();
             $table->dateTime('submitted_date')->nullable();
             $table->char('user_ip', 15)->nullable();
-            $table->string('name', 30);
-            $table->string('surname', 30);
+            $table->string('firstname', 30);
+            $table->string('lastname', 30);
             $table->smallInteger('yob')->nullable();	//Year Of Birth
             $table->string('city', 30)->nullable();
             $table->bigInteger('phone')->nullable();

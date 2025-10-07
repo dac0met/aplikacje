@@ -14,22 +14,22 @@
                 <label class="block font-medium text-sm text-gray-700" for="name">
                     First name
                 </label>
-                <input id="name" type="text"
-                       wire:model.defer="name"
+                <input id="firsname" type="text"
+                       wire:model.defer="firstname"
                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                       autocomplete="given-name">
-                @error('name') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+                       autocomplete="given-name" >
+                @error('firstname') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
             </div>
 
             <div>
                 <label class="block font-medium text-sm text-gray-700" for="surname">
                     Last name
                 </label>
-                <input id="surname" type="text"
-                       wire:model.defer="surname"
+                <input id="lastname" type="text"
+                       wire:model.defer="lastname"
                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                       autocomplete="family-name">
-                @error('surname') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+                       autocomplete="family-name" >
+                @error('lastname') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
             </div>
         </div>
 
@@ -42,6 +42,7 @@
                        wire:model.defer="yob"
                        {{-- class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"> --}}
                        class="mt-1 w-24 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                       autocomplete="bday-year">
                 @error('yob') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
             </div>
 

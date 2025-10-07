@@ -45,11 +45,11 @@ class ApplicantForm
                         DatePicker::make('submitted_date')
                             ->columnspan(2),
 
-                        TextInput::make('name')
+                        TextInput::make('firstname')
                             ->columnspan(4)
                             ->required(),
 
-                        TextInput::make('surname')
+                        TextInput::make('lastname')
                             ->columnspan(4)
                             ->required(),
 

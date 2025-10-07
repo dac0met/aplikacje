@@ -20,7 +20,7 @@ class ApplicantResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'Name';
+    protected static ?string $recordTitleAttribute = 'Last Name';
 
     public static function form(Schema $schema): Schema
     {

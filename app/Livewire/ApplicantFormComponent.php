@@ -11,8 +11,8 @@ use Illuminate\Validation\Rule;
 class ApplicantFormComponent extends Component
 {
     // ---------- właściwości formularza ----------
-    public $name;
-    public $surname;
+    public $firstname;
+    public $lastname;
     public $yob;
     public $new_consent_label;
     public $city;
@@ -34,8 +34,8 @@ class ApplicantFormComponent extends Component
     protected function rules(): array
     {
         return [
-            'name'               => ['required', 'string', 'max:30'],
-            'surname'            => ['required', 'string', 'max:30'],
+            'firstname'               => ['required', 'string', 'max:30'],
+            'lastname'            => ['required', 'string', 'max:30'],
             'yob'                => ['nullable', 'digits:4'],
             'city'               => ['nullable', 'string', 'max:30'],
             'phone'              => ['nullable', 'string', 'max:30'],
@@ -61,8 +61,8 @@ class ApplicantFormComponent extends Component
 
         // zapisujemy kandydata
         $applicant = Applicant::create([
-            'name'               => $this->name,
-            'surname'            => $this->surname,
+            'firstname'               => $this->firstname,
+            'lastname'            => $this->lastname,
             'yob'                => $this->yob,
             'city'               => $this->city,
             'phone'              => $this->phone,
@@ -86,8 +86,8 @@ class ApplicantFormComponent extends Component
     private function resetForm(): void
     {
         $this->reset([
-            'name',
-            'surname',
+            'firstname',
+            'lastname',
             'yob',
             'city',
             'phone',
