@@ -13,7 +13,6 @@ class ApplicantFormComponent extends Component
     // ---------- właściwości formularza ----------
     public $firstname;
     public $lastname;
-    public $yob;
     public $new_consent_label;
     public $city;
     public $phone;
@@ -36,7 +35,6 @@ class ApplicantFormComponent extends Component
         return [
             'firstname'               => ['required', 'string', 'max:30'],
             'lastname'            => ['required', 'string', 'max:30'],
-            'yob'                => ['nullable', 'digits:4'],
             'city'               => ['nullable', 'string', 'max:30'],
             'phone'              => ['nullable', 'string', 'max:30'],
             'email'              => ['nullable', 'email', 'max:50'],
@@ -63,7 +61,6 @@ class ApplicantFormComponent extends Component
         $applicant = Applicant::create([
             'firstname'               => $this->firstname,
             'lastname'            => $this->lastname,
-            'yob'                => $this->yob,
             'city'               => $this->city,
             'phone'              => $this->phone,
             'email'              => $this->email,
@@ -88,7 +85,6 @@ class ApplicantFormComponent extends Component
         $this->reset([
             'firstname',
             'lastname',
-            'yob',
             'city',
             'phone',
             'email',

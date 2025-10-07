@@ -34,18 +34,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="flex items-start">
-                <label class="block font-medium text-sm text-gray-700 mr-2" for="yob">
-                    Year of birth
-                </label>
-                <input id="yob" type="number" min="1900" max="{{ now()->year }}"
-                       wire:model.defer="yob"
-                       {{-- class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"> --}}
-                       class="mt-1 w-24 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                       autocomplete="bday-year">
-                @error('yob') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
-            </div>
-
+            
             <div class="flex items-start">
                 <label class="block font-medium text-sm text-gray-700 mr-2" for="city">
                     Place of residence ( City )
