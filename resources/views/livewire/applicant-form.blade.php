@@ -1,144 +1,183 @@
+<form>
+    <div class="space-y-12">
 
-{{-- resources/views/livewire/applicant-form.blade.php --}}
-{{-- Cały formularz opakowany w kartę z Tailwind --}}
-<div class="bg-white shadow-md rounded-lg p-6">
-
-
-
-    {{-- Formularz – submit wywołuje metodę submit() w komponencie --}}
-    <form wire:submit.prevent="submit" class="space-y-6">
-
-        {{-- ===== Dane osobowe ===== --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <label class="block font-medium text-sm text-gray-700" for="name">
-                    First name
-                </label>
-                <input id="firsname" type="text"
-                       wire:model.defer="firstname"
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                       autocomplete="given-name" >
-                @error('firstname') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
-            </div>
-
-            <div>
-                <label class="block font-medium text-sm text-gray-700" for="surname">
-                    Last name
-                </label>
-                <input id="lastname" type="text"
-                       wire:model.defer="lastname"
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                       autocomplete="family-name" >
-                @error('lastname') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            
-            <div class="flex items-start">
-                <label class="block font-medium text-sm text-gray-700 mr-2" for="city">
-                    Place of residence ( City )
-                </label>
-                <input id="city" type="text"
-                       wire:model.defer="city"
-                       {{-- class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"> --}}
-                       class="mt-1 flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                @error('city') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
-            </div>
-        </div>
-
-        {{-- ===== Kontakt ===== --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <label class="block font-medium text-sm text-gray-700" for="email">
-                    E‑mail
-                </label>
-                <input id="email" type="email"
-                       wire:model.defer="email"
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                @error('email') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
-            </div>
-
-            <div>
-                <label class="block font-medium text-sm text-gray-700" for="phone">
-                    Phone number in the Polish zone
-                </label>
-                <input id="phone" type="text"
-                       wire:model.defer="phone"
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                @error('phone') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
-            </div>
-        </div>
-
-
-        {{-- ===== Stanowisko ===== --}}
-        {{-- <div>
-            <label class="block font-medium text-sm text-gray-700" for="job_position_id">
-                Position applied for
-            </label>
-            <select id="job_position_id"
-                    wire:model="job_position_id"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                <option value="">-</option>
-                @foreach($jobPositions as $id => $name)
-                    <option value="{{ $id }}">{{ $name }}</option>
-                @endforeach
-            </select>
-            @error('job_position_id') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
-        </div> --}}
-
-        {{-- ==== Nasz własny Checkbox‑list ==== --}}
-        <div class="mt-4">
-            <label class="block ml-2 text-sm text-gray-900">Stanowiska, które Cię interesują</label>
-
-            @foreach ($jobPositions as $position)
-                <div class="flex items-center space-x-2">
-                    <input
-                        type="checkbox"
-                        value="{{ $position->id }}"
-                        wire:model="selected_job_positions"
-                        id="job-position-{{ $position->id }}"
-                        class="border-gray-300 rounded shadow-sm text-primary-600 focus:ring-primary-500"
-                    >
-                    <label for="job-position-{{ $position->id }}" class="select-none">
-                        {{ $position->name }}
-                    </label>
+        <div class="border-b border-white/10 pb-12">
+            <h2 class="text-base/7 font-semibold text-white">Personal Information</h2>
+            <p class="mt-1 text-sm/6 text-gray-400">Use a permanent address where you can receive mail.</p>
+            <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                {{-- First name --}}
+                <div class="sm:col-span-3">
+                    <label for="firstname" class="block text-sm/6 font-medium text-white">First Name</label>
+                    <div class="mt-2">
+                        <input id="firstname" type="text" wire:model.defer="firstname" autocomplete="given-name"
+                            class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
+                        @error('firstname') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+                    </div>
                 </div>
-            @endforeach
 
-            @error('selected_job_positions') <p class="mt-1 text-red-600">{{ $message }}</p> @enderror
-        </div>
+                {{-- Last name --}}
+                <div class="sm:col-span-3">
+                    <label for="lastname" class="block text-sm/6 font-medium text-white">Last Name</label>
+                    <div class="mt-2">
+                        <input id="lastname" type="text" wire:model.defer="lastname" autocomplete="family-name"
+                            class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
+                        @error('lastname') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+                    </div>
+                </div>
 
+                {{-- ***************** trzy krótkie pola w linii *************************** --}}
+                {{-- city --}}
+                <div class="sm:col-span-2 sm:col-start-1">
+                    <label for="city" class="block text-sm/6 font-medium text-white">Place of residence ( City )</label>
+                    <div class="mt-2">
+                        <input id="city" type="text" wire:model.defer="city" autocomplete="city"
+                            class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
+                        @error('city') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+                    </div>
+                </div>
 
-        {{-- ===== Praca zmianowa (checkbox) ===== --}}
-        <div class="flex items-center">
-            <input id="shift_work" type="checkbox"
-                   wire:model="shift_work"
-                   class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-            <label for="shift_work" class="ml-2 block text-sm text-gray-900">
-                Willingness to work in shifts
-            </label>
-            @error('shift_work') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
-        </div>
+                {{-- phone --}}
+                <div class="sm:col-span-2">
+                    <label for="phone" class="block text-sm/6 font-medium text-white">Phone number in the Polish
+                        zone</label>
+                    <div class="mt-2">
+                        <input id="phone" type="text" wire:model.defer="phone" autocomplete="phone"
+                            class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
+                        @error('phone') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+                    </div>
+                </div>
 
-         {{-- Komunikat sukcesu po zapisaniu (flash) --}}
-        @if (session()->has('message'))
-            <div class="mb-4 p-4 bg-green-100 text-green-800 rounded">
-                {{ session('message') }}
+                {{-- email --}}
+                <div class="sm:col-span-2">
+                    <label for="email" class="block text-sm/6 font-medium text-white">Email address</label>
+                    <div class="mt-2">
+                        <input id="email" type="email" wire:model.defer="email" autocomplete="email"
+                            class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
+                        @error('email') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+                {{-- *************************************************************************** --}}
             </div>
-        @endif
-
-        {{-- ===== Przycisk wysyłki ===== --}}
-        <div class="flex justify-end pt-4 border-t border-gray-200">
-            <button type="submit"
-                    {{-- class="px-6 py-2 bg-green-600
-                     text-white rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"> --}}
-                    class="inline-flex items-center px-6 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700
-                     focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-150 z-60"
-                    wire:loading.attr="disabled" wire:target="submit" >
-                Send
-            </button>
         </div>
-    </form>
 
-</div>
+
+        {{-- CHECKBOXY --}}
+        <div class="mt-10 space-y-10">
+            <fieldset>
+                <legend class="text-sm/6 font-semibold text-white">Position applied for:</legend>
+                <div class="mt-6 space-y-6">
+                    {{-- comments --}}
+                    <div class="flex gap-3">
+                        <div class="flex h-6 shrink-0 items-center">
+                            <div class="group grid size-4 grid-cols-1">
+                                <input id="comments" type="checkbox" name="comments" checked
+                                    aria-describedby="comments-description"
+                                    class="col-start-1 row-start-1 appearance-none rounded border border-white/10 bg-white/5 checked:border-indigo-500 checked:bg-indigo-500 indeterminate:border-indigo-500 indeterminate:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:border-white/5 disabled:bg-white/10 disabled:checked:bg-white/10 forced-colors:appearance-auto" />
+                                <svg viewBox="0 0 14 14" fill="none"
+                                    class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-white/25">
+                                    <path d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="opacity-0 group-has-[:checked]:opacity-100" />
+                                    <path d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="opacity-0 group-has-[:indeterminate]:opacity-100" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="text-sm/6">
+                            <label for="comments" class="font-medium text-white">Comments</label>
+                          
+                        </div>
+                    </div>
+                    {{-- candidates --}}
+                    <div class="flex gap-3">
+                        <div class="flex h-6 shrink-0 items-center">
+                            <div class="group grid size-4 grid-cols-1">
+                                <input id="candidates" type="checkbox" name="candidates"
+                                    aria-describedby="candidates-description"
+                                    class="col-start-1 row-start-1 appearance-none rounded border border-white/10 bg-white/5 checked:border-indigo-500 checked:bg-indigo-500 indeterminate:border-indigo-500 indeterminate:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:border-white/5 disabled:bg-white/10 disabled:checked:bg-white/10 forced-colors:appearance-auto" />
+                                <svg viewBox="0 0 14 14" fill="none"
+                                    class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-white/25">
+                                    <path d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="opacity-0 group-has-[:checked]:opacity-100" />
+                                    <path d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="opacity-0 group-has-[:indeterminate]:opacity-100" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="text-sm/6">
+                            <label for="candidates" class="font-medium text-white">Candidates</label>
+                            
+                        </div>
+                    </div>
+                    {{-- offers --}}
+                    <div class="flex gap-3">
+                        <div class="flex h-6 shrink-0 items-center">
+                            <div class="group grid size-4 grid-cols-1">
+                                <input id="offers" type="checkbox" name="offers"
+                                    aria-describedby="offers-description"
+                                    class="col-start-1 row-start-1 appearance-none rounded border border-white/10 bg-white/5 checked:border-indigo-500 checked:bg-indigo-500 indeterminate:border-indigo-500 indeterminate:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:border-white/5 disabled:bg-white/10 disabled:checked:bg-white/10 forced-colors:appearance-auto" />
+                                <svg viewBox="0 0 14 14" fill="none"
+                                    class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-white/25">
+                                    <path d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="opacity-0 group-has-[:checked]:opacity-100" />
+                                    <path d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="opacity-0 group-has-[:indeterminate]:opacity-100" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="text-sm/6">
+                            <label for="offers" class="font-medium text-white">Offers</label>
+                            
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            {{-- koniec checkboxów --}}
+
+
+            {{--***************** trzy krótkie pola w linii ***************************--}}
+            {{-- Education --}}
+            <div class="sm:col-span-3">
+            <label for="education" class="block text-sm/6 font-medium text-white">Education>
+                <div class="mt-2 grid grid-cols-1">
+                    <select id="education" autocomplete="education" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white/5 py-1.5 pl-3 pr-8 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 *:bg-gray-800 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6">
+                    <option>United States</option>
+                    <option>Canada</option>
+                    <option>Mexico</option>
+                    </select>
+                </div>    
+            </div>
+
+            {{-- koniec checkboxów --}}
+            {{-- University --}}
+            <div class="sm:col-span-2">
+                <label for="university" class="block text-sm/6 font-medium text-white">University</label>
+                <div class="mt-2">
+                    <input id="university" type="text" name="university" autocomplete="address-level1"
+                        class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
+                </div>
+            </div>
+
+            {{-- Field of Study --}}
+            <div class="sm:col-span-2">
+                <label for="field_of_study" class="block text-sm/6 font-medium text-white">Field of Study</label>
+                <div class="mt-2">
+                    <input id="field_of_study" type="text" name="field_of_study" autocomplete="postal-code"
+                        class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
+                </div>
+            </div>
+            {{-- *************************************************************************** --}}
+        </div>
+
+
+
+
+    </div>
+
+    {{-- BUTTONS --}}
+    <div class="mt-6 flex items-center justify-end gap-x-6">
+        
+        <button type="submit"
+            class="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+            wire:loading.attr="disabled" wire:target="submit" >Sand</button>
+    </div>
+</form>
