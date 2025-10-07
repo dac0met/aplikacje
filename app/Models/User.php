@@ -45,15 +45,6 @@ class User extends Authenticatable implements FilamentUser
         'two_factor_secret',
     ];
 
-    // /**
-    //  * The accessors to append to the model's array form.
-    //  * Akcesory do dołączenia do formularza tablicowego modelu.
-    //  *
-    //  * @var array<int, string>
-    //  */
-    // protected $appends = [
-    //     'profile_photo_url',
-    // ];
 
     /**
      * Get the attributes that should be cast.

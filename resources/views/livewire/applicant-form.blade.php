@@ -34,23 +34,25 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <label class="block font-medium text-sm text-gray-700" for="yob">
+            <div class="flex items-start">
+                <label class="block font-medium text-sm text-gray-700 mr-2" for="yob">
                     Year of birth
                 </label>
                 <input id="yob" type="number" min="1900" max="{{ now()->year }}"
                        wire:model.defer="yob"
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                       {{-- class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"> --}}
+                       class="mt-1 w-24 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 @error('yob') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
             </div>
 
-            <div>
-                <label class="block font-medium text-sm text-gray-700" for="city">
+            <div class="flex items-start">
+                <label class="block font-medium text-sm text-gray-700 mr-2" for="city">
                     Place of residence ( City )
                 </label>
                 <input id="city" type="text"
                        wire:model.defer="city"
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                       {{-- class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"> --}}
+                       class="mt-1 flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 @error('city') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
             </div>
         </div>
@@ -80,7 +82,7 @@
 
 
         {{-- ===== Stanowisko ===== --}}
-        <div>
+        {{-- <div>
             <label class="block font-medium text-sm text-gray-700" for="job_position_id">
                 Position applied for
             </label>
@@ -93,7 +95,30 @@
                 @endforeach
             </select>
             @error('job_position_id') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+        </div> --}}
+
+        {{-- ==== Nasz własny Checkbox‑list ==== --}}
+        <div class="mt-4">
+            <label class="block ml-2 text-sm text-gray-900">Stanowiska, które Cię interesują</label>
+
+            @foreach ($jobPositions as $position)
+                <div class="flex items-center space-x-2">
+                    <input
+                        type="checkbox"
+                        value="{{ $position->id }}"
+                        wire:model="selected_job_positions"
+                        id="job-position-{{ $position->id }}"
+                        class="border-gray-300 rounded shadow-sm text-primary-600 focus:ring-primary-500"
+                    >
+                    <label for="job-position-{{ $position->id }}" class="select-none">
+                        {{ $position->name }}
+                    </label>
+                </div>
+            @endforeach
+
+            @error('selected_job_positions') <p class="mt-1 text-red-600">{{ $message }}</p> @enderror
         </div>
+
 
         {{-- ===== Praca zmianowa (checkbox) ===== --}}
         <div class="flex items-center">

@@ -14,13 +14,11 @@ class ConsentSourceSeeder extends Seeder
     public function run(): void
     {
         ConsentSource::factory()->create([
-            'key' => 'web',
-            'label' => 'Strona internetowa',
+            'name' => 'Strona internetowa',
         ]);
 
         ConsentSource::factory()->create([
-            'key' => 'email',
-            'label' => 'Email',
+            'name' => 'Email',
         ]);
     }
 }

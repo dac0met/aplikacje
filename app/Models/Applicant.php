@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\JobPosition;
 use App\Models\ConsentSource;
+use App\Models\JobPosition;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 // use Illuminate\Database\Eloquent\Concerns\HasRelationships;
 
 class Applicant extends Model
@@ -28,6 +29,7 @@ class Applicant extends Model
         'city',
         'phone',
         'email',
+        'position',
         'consent',
         'education',
         'university',
@@ -63,6 +65,22 @@ class Applicant extends Model
         return $this->belongsTo(JobPosition::class);
     }
 
+    public function jobPositions() : BelongsToMany     // na frondendzie
+    {
+        return $this->belongsToMany(JobPosition::class,
+            'applicant_job_position',   // nazwa tabeli pivot
+            'applicant_id',
+            'job_position_id');
+    }
+    
+    /** @return string */
+    public function getPositionsAttribute(): string
+    {
+        return $this->jobPositions
+            ->pluck('name')
+            ->join("\n");       // nowa linia – idealna dla Textarea
+    }
+    
     // protected static function booted()
     // {
     //     static::creating(function ($applicant) {

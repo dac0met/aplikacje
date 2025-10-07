@@ -32,11 +32,16 @@ class ApplicantResource extends Resource
         return ApplicantsTable::configure($table);
     }
 
-    public static function getRelations(): array
+    // public static function getRelations(): array
+    // {
+    //     return [
+    //         //
+    //     ];
+    // }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        return [
-            //
-        ];
+        return parent::getEloquentQuery()->with('jobPositions');
     }
 
     public static function getPages(): array

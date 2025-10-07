@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('applicants', function (Blueprint $table) {
             $table->id();
             $table->foreignId('job_position_id')->constrained()->cascadeOnDelete()->nullable();
-            $table->foreignId('consent_source_id')->constrained('consent_sources')->onDelete('set null')->nullable();
+            $table->foreignId('consent_source_id')->constrained()->cascadeOnDelete()->nullable();
             $table->dateTime('submitted_date')->nullable();
             $table->char('user_ip', 15)->nullable();
             $table->string('name', 30);
@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('city', 30)->nullable();
             $table->bigInteger('phone')->nullable();
             $table->string('email', 50)->nullable();
+            $table->string('position', 191)->nullable();
             $table->string('consent', 10)->nullable();	// zgoda na pracę zmianową
             $table->string('education', 30)->nullable();
             $table->string('university',191)->nullable();

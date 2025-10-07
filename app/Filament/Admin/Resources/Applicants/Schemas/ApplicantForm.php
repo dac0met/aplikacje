@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Applicants\Schemas;
 
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Form;
 use Filament\Actions\Action;
 use Filament\Schemas\Schema;
@@ -113,9 +114,25 @@ class ApplicantForm
                             ->label('Position')
                             ->columnspan(6)
                             ->relationship('jobPosition','name')
-                            // ->multiple()
                             ->preload()
                             ->default(null),
+
+                        Textarea::make('position')
+                            ->columnspan(6)
+                            // ->disabled()           // Nie zapisujemy tego pola – służy wyłącznie do wyświetlania
+                            ->rows(3)                         // wysokość pola
+                            ->placeholder('Brak wybranych stanowisk!')
+                            ->label('Wybrane stanowiska')
+                            ->afterStateHydrated(function ($component, $state) {
+                                $record = $component->getRecord();
+                                if ($record && $record->jobPositions) {
+                                        $component->state(
+                                        $record->jobPositions->pluck('name')->join("\n ")
+                                    );
+                                } else {
+                                    $component->state($state); // zachowujemy dotychczasowy stan (pusty)
+                                }
+                            }),    
 
                         TextInput::make('education')
                             ->columnspan(4)

@@ -30,6 +30,7 @@ class EditorPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->sidebarCollapsibleOnDesktop(true)
             ->discoverResources(in: app_path('Filament/Editor/Resources'), for: 'App\Filament\Editor\Resources')
             ->discoverPages(in: app_path('Filament/Editor/Pages'), for: 'App\Filament\Editor\Pages')
             ->pages([

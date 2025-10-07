@@ -88,6 +88,13 @@ class ApplicantsTable
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
 
+                // Kolumna z nazwami stanowisk
+                TextColumn::make('positions')
+                    ->label('Stanowiska')
+                    ->formatStateUsing(fn ( ?\App\Models\Applicant $record ) => $record
+                        ? $record->jobPositions->pluck('name')->join(', ')
+                        : null),
+                
                 TextColumn::make('education')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: false)
@@ -209,7 +216,7 @@ class ApplicantsTable
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
 
-            ])
+            ])->defaultSort('id','DESC')
             ->filters([
                 SelectFilter::make('position')
                     ->relationship('jobposition','name'),
