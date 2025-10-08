@@ -211,14 +211,6 @@ class ApplicantForm
                             ->columns(1)
                             ->multiple(false)
                             ->storeFileNamesIn('orig_filename_pl')
-                            // ->preserveFilenames(true)
-                            // ->getUploadedFileNameForStorageUsing(function ($file) {
-                            //     // Generujemy unikalną nazwę pliku, np. dodając timestamp
-                            //     $timestamp = now()->timestamp;
-                            //     $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                            //     $extension = $file->getClientOriginalExtension();
-                            //     return $timestamp . '_' . $originalName . '.' . $extension;
-                            // })
                             ->downloadable()
                             ->acceptedFileTypes([
                                 'application/pdf',

@@ -166,14 +166,15 @@
                 </div>
             </div>
 
+            {{-- Experience --}}
             <div class="sm:col-span-2 mt-8">
-                    <label for="experience" class="block font-medium text-white text-sm/6">Most important skills, certificates, programming languages, etc.</label>
-                    <div class="mt-2">
-                        <textarea id="experience" type="text" name="experience" autocomplete="experience"
-                            class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" >
-                        </textarea>
-                    </div>
+                <label for="experience" class="block font-medium text-white text-sm/6">Most important skills, certificates, programming languages, etc.</label>
+                <div class="mt-2">
+                    <textarea id="experience" type="text" name="experience" autocomplete="experience"
+                        class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" >
+                    </textarea>
                 </div>
+            </div>
         </div>  {{-- linia na dole bloku --}}
 
         <div class="pb-12 border-b border-white/10">
@@ -225,20 +226,48 @@
                     </div>
             </div>
         </div>
+        {{-- koniec linia na dole bloku --}}
+
+        {{-- SHIFT WORK --}}
         <div class="flex items-center mt-8">
             <div class="flex">
-                <label for="shift_work" class="block font-medium text-white text-sm/6">Willingness to work in shifts:</label>
-                <div class="flex items-center me-4">
-                    <input id="shift_work" type="radio" value="" name="inline-radio-group" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                <label for="shift_work" class="block font-medium text-white text-sm/6 mr-6">Willingness to work in shifts:</label>
+                <div class="flex items-center ">
+                    <input id="shift_work" type="radio" value="" name="shift_work" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                     <label for="shift_work" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Yes</label>
                 </div>
-                <div class="flex items-center me-4">
-                    <input id="shift_work" type="radio" value="" name="inline-radio-group" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                <div class="flex items-center">
+                    <input id="shift_work" type="radio" value="" name="shift_work" class="ms-4 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                     <label for="shift_work" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">No</label>
                 </div>
             </div>
         </div>
 
+        {{-- SALARY --}}
+         <div class="sm:col-span-2 mt-8">
+            <div class="flex">
+                <div class="flex items-center ">
+                    <label for="salary" class="block mb-2 mr-6 text-sm font-medium text-gray-900 dark:text-white">Salary Expectations (gross, zł)</label>
+                </div>
+                <div class="flex items-center ">
+                    <input type="number" id="salary" aria-describedby="helper-text-explanation" class="w-24 p-2.5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                </div>
+            </div>
+        </div>
+         <div class="sm:col-span-2 mt-8">
+            <div class="flex">
+                <div class="flex items-center ">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Attach resume in English</label>
+                    <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">pdf, docx, doc, odt (max. 500 KB).</p>
+                </div>
+                <div class="flex items-center ">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Attach resume in Polish</label>
+                    <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
+            </div>
+        </div>
+      
+            
     </div>
 
     {{-- BUTTONS --}}
