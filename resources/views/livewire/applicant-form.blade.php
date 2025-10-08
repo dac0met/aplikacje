@@ -1,6 +1,6 @@
 <form>
-    <div class="space-y-12">
-
+    {{-- <div class="space-y-12"> --}}
+    <div>
         <div class="pb-12 border-b border-white/10">
             <h2 class="font-semibold text-white text-base/7">Personal Information</h2>
             <p class="mt-1 text-gray-400 text-sm/6">Use a permanent address where you can receive mail.</p>
@@ -63,7 +63,8 @@
         {{-- CHECKBOXY --}}
         <div class="mt-10 space-y-10">
             <fieldset>
-                <legend class="font-semibold text-white text-sm/6">Position applied for:</legend>
+
+                <label for="experience" class="block font-medium text-white text-sm/6">Position applied for:</label>
                 <div class="mt-6 space-y-6">
                     {{-- comments --}}
                     <div class="flex gap-3">
@@ -83,7 +84,6 @@
                         </div>
                         <div class="text-sm/6">
                             <label for="comments" class="font-medium text-white">Comments</label>
-
                         </div>
                     </div>
                     {{-- candidates --}}
@@ -125,20 +125,19 @@
                         </div>
                         <div class="text-sm/6">
                             <label for="offers" class="font-medium text-white">Offers</label>
-
                         </div>
                     </div>
                 </div>
             </fieldset>
         </div>
-            {{-- koniec checkboxów --}}
+        {{-- koniec checkboxów --}}
 
         <div class="pb-12 border-b border-white/10">
             {{--***************** trzy krótkie pola w linii ***************************--}}
             <div class="grid grid-cols-1 mt-10 gap-x-6 gap-y-8 sm:grid-cols-6">
                 {{-- Education --}}
                 <div class="sm:col-span-2">
-                <label for="education" class="block font-medium text-white text-sm/6">Education>
+                <label for="education" class="block font-medium text-white text-sm/6">Education</label>
                     <div class="grid grid-cols-1 mt-2">
                         <select id="education" autocomplete="education" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white/5 py-1.5 pl-3 pr-8 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 *:bg-gray-800 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6">
                         <option>United States</option>
@@ -166,19 +165,79 @@
                     </div>
                 </div>
             </div>
+
+            <div class="sm:col-span-2 mt-8">
+                    <label for="experience" class="block font-medium text-white text-sm/6">Most important skills, certificates, programming languages, etc.</label>
+                    <div class="mt-2">
+                        <textarea id="experience" type="text" name="experience" autocomplete="experience"
+                            class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" >
+                        </textarea>
+                    </div>
+                </div>
         </div>  {{-- linia na dole bloku --}}
 
-        <div class="sm:col-span-2">
-                <label for="english" class="block font-medium text-white text-sm/6">Education>
-                <div class="grid grid-cols-1 mt-2">
-                    <select id="english" autocomplete="english" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white/5 py-1.5 pl-3 pr-8 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 *:bg-gray-800 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6">
-                    <option>United States</option>
-                    <option>Canada</option>
-                    <option>Mexico</option>
-                    </select>
+        <div class="pb-12 border-b border-white/10">
+            {{-- English --}}
+            <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 mt-8">
+                <div class="sm:col-span-2">
+                    <label for="english" class="block font-medium text-white text-sm/6 ">Level of English</label>
+                    <div class="grid grid-cols-1 mt-2">
+                        <select id="english" autocomplete="english" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white/5 py-1.5 pl-3 pr-8 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 *:bg-gray-800 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6">
+                        <option>A1</option>
+                        <option>A2</option>
+                        <option>B1</option>
+                        <option>B2</option>
+                        <option>C1</option>
+                        <option>C2</option>
+                        </select>
+                    </div>
                 </div>
-        </div>
+                <div class="sm:col-span-2">
+                <label for="another_lang" class="block font-medium text-white text-sm/6">Other languages</label>
+                    <div class="mt-2">
+                        <input id="another_lang" type="text" name="another_lang" autocomplete="another_lang"
+                            class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
+                    </div>
+                </div>
+                <div class="sm:col-span-2">
+                    <label for="another_level" class="block font-medium text-white text-sm/6">Level of those languages</label>
+                    <div class="grid grid-cols-1 mt-2">
+                        <select id="another_level" autocomplete="another_level" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white/5 py-1.5 pl-3 pr-8 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 *:bg-gray-800 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6">
+                        <option>A1</option>
+                        <option>A2</option>
+                        <option>B1</option>
+                        <option>B2</option>
+                        <option>C1</option>
+                        <option>C2</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
+            <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 mt-8">
+                <div class="sm:col-span-2">
+                        <label class="block font-medium text-gray-300 text-sm/6">A1 - Beginner</label>
+                        <label class="block font-medium text-gray-300 text-sm/6">A2 - Pre-Intermediate</label>
+                        <label class="block font-medium text-gray-300 text-sm/6">B1 - Intermediate</label>
+                        <label class="block font-medium text-gray-300 text-sm/6">B2 - Upper-Intermediate</label>
+                        <label class="block font-medium text-gray-300 text-sm/6">C1 - Advanced</label>
+                        <label class="block font-medium text-gray-300 text-sm/6">C2 - Proficient</label>
+                    </div>
+            </div>
+        </div>
+        <div class="flex items-center mt-8">
+            <div class="flex">
+                <label for="shift_work" class="block font-medium text-white text-sm/6">Willingness to work in shifts:</label>
+                <div class="flex items-center me-4">
+                    <input id="shift_work" type="radio" value="" name="inline-radio-group" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="shift_work" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Yes</label>
+                </div>
+                <div class="flex items-center me-4">
+                    <input id="shift_work" type="radio" value="" name="inline-radio-group" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="shift_work" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">No</label>
+                </div>
+            </div>
+        </div>
 
     </div>
 
