@@ -17,7 +17,7 @@ class ApplicantFactory extends Factory
     {
         // Lista przykładowych języków i poziomów
         $languages = ['Dutch', 'Polish', 'German', 'Spanish', 'French'];
-        $levels    = ['a1', 'a2', 'b1', 'b2', 'c1', 'c2'];
+        $levels    = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
         $ratings   = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
         $salary = [5000, 5500, 6000, 6500, 12000, 7200, 9600,7700, 8500, 4500];
@@ -55,7 +55,7 @@ class ApplicantFactory extends Factory
             'sent_to'          => $this->faker->email,
             'interview'        => $this->faker->optional()->sentence(),
             'feedback'         => $this->faker->optional()->sentence(),
-            'gender'           => $this->faker->randomElement(['Male', 'Female']),
+            'gender'           => $this->faker->randomElement(['male', 'female']),
             'gross'            => $this->faker->randomElement(['brutto', 'netto']),
             'notes'            => $this->faker->sentence(12),
         ];
