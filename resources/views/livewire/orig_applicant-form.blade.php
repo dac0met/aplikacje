@@ -179,7 +179,8 @@
                      text-white rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"> --}}
                     class="inline-flex items-center px-6 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700
                      focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-150 z-60"
-                    wire:loading.attr="disabled" wire:target="submit" >
+                    wire:loading.attr="disabled" 
+                    wire:target="submit" >
                 Send
             </button>
         </div>

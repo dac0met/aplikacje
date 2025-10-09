@@ -70,173 +70,28 @@
         </div>  {{-- linia na dole bloku --}}
 
 
-        {{-- CHECKBOXY --}}
-        <div class="mt-10 space-y-10">
-            <fieldset>
+        {{-- ==== Nasz własny Checkbox‑list ==== --}}
+        <div class="mt-4">
+            <label class="block ml-2 text-sm text-gray-900">Stanowiska, które Cię interesują</label>
 
-                <label for="experience" class="block font-medium text-white text-sm/6">Position applied for:</label>
-                <div class="mt-6 space-y-6">
-                    {{-- comments --}}
-                    <div class="flex gap-3">
-                        <div class="flex items-center h-6 shrink-0">
-                            <div class="grid grid-cols-1 group size-4">
-                                <input id="comments" type="checkbox" name="comments" checked
-                                    aria-describedby="comments-description"
-                                    class="col-start-1 row-start-1 border rounded appearance-none border-white/10 bg-white/5 checked:border-indigo-500 checked:bg-indigo-500 indeterminate:border-indigo-500 indeterminate:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:border-white/5 disabled:bg-white/10 disabled:checked:bg-white/10 forced-colors:appearance-auto" />
-                                <svg viewBox="0 0 14 14" fill="none"
-                                    class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-white/25">
-                                    <path d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" class="opacity-0 group-has-[:checked]:opacity-100" />
-                                    <path d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                        class="opacity-0 group-has-[:indeterminate]:opacity-100" />
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="text-sm/6">
-                            <label for="comments" class="font-medium text-white">Comments</label>
-                        </div>
-                    </div>
-                    {{-- candidates --}}
-                    <div class="flex gap-3">
-                        <div class="flex items-center h-6 shrink-0">
-                            <div class="grid grid-cols-1 group size-4">
-                                <input id="candidates" type="checkbox" name="candidates"
-                                    aria-describedby="candidates-description"
-                                    class="col-start-1 row-start-1 border rounded appearance-none border-white/10 bg-white/5 checked:border-indigo-500 checked:bg-indigo-500 indeterminate:border-indigo-500 indeterminate:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:border-white/5 disabled:bg-white/10 disabled:checked:bg-white/10 forced-colors:appearance-auto" />
-                                <svg viewBox="0 0 14 14" fill="none"
-                                    class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-white/25">
-                                    <path d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" class="opacity-0 group-has-[:checked]:opacity-100" />
-                                    <path d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                        class="opacity-0 group-has-[:indeterminate]:opacity-100" />
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="text-sm/6">
-                            <label for="candidates" class="font-medium text-white">Candidates</label>
-
-                        </div>
-                    </div>
-                    {{-- offers --}}
-                    <div class="flex gap-3">
-                        <div class="flex items-center h-6 shrink-0">
-                            <div class="grid grid-cols-1 group size-4">
-                                <input id="offers" type="checkbox" name="offers"
-                                    aria-describedby="offers-description"
-                                    class="col-start-1 row-start-1 border rounded appearance-none border-white/10 bg-white/5 checked:border-indigo-500 checked:bg-indigo-500 indeterminate:border-indigo-500 indeterminate:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:border-white/5 disabled:bg-white/10 disabled:checked:bg-white/10 forced-colors:appearance-auto" />
-                                <svg viewBox="0 0 14 14" fill="none"
-                                    class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-white/25">
-                                    <path d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" class="opacity-0 group-has-[:checked]:opacity-100" />
-                                    <path d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                        class="opacity-0 group-has-[:indeterminate]:opacity-100" />
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="text-sm/6">
-                            <label for="offers" class="font-medium text-white">Offers</label>
-                        </div>
-                    </div>
+            @foreach ($jobPositions as $position)
+                <div class="flex items-center space-x-2">
+                    <input
+                        type="checkbox"
+                        value="{{ $position->id }}"
+                        wire:model="selected_job_positions"
+                        id="job-position-{{ $position->id }}"
+                        class="border-gray-300 rounded shadow-sm text-primary-600 focus:ring-primary-500"
+                    >
+                    <label for="job-position-{{ $position->id }}" class="select-none">
+                        {{ $position->name }}
+                    </label>
                 </div>
-            </fieldset>
+            @endforeach
+
+            @error('selected_job_positions') <p class="mt-1 text-red-600">{{ $message }}</p> @enderror
         </div>
-        {{-- koniec checkboxów --}}
 
-        <div class="pb-12 border-b border-white/10">
-            {{--***************** trzy krótkie pola w linii ***************************--}}
-            <div class="grid grid-cols-1 mt-10 gap-x-6 gap-y-8 sm:grid-cols-6">
-                {{-- Education --}}
-                <div class="sm:col-span-2">
-                <label for="education" class="block font-medium text-white text-sm/6">Education</label>
-                    <div class="grid grid-cols-1 mt-2">
-                        <select id="education" autocomplete="education" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white/5 py-1.5 pl-3 pr-8 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 *:bg-gray-800 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6">
-                        <option>United States</option>
-                        <option>Canada</option>
-                        <option>Mexico</option>
-                        </select>
-                    </div>
-                </div>
-
-                {{-- University --}}
-                <div class="sm:col-span-2">
-                    <label for="university" class="block font-medium text-white text-sm/6">University</label>
-                    <div class="mt-2">
-                        <input id="university" type="text" name="university" autocomplete="address-level1"
-                            class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
-                    </div>
-                </div>
-
-                {{-- Field of Study --}}
-                <div class="sm:col-span-2">
-                    <label for="field_of_study" class="block font-medium text-white text-sm/6">Field of Study</label>
-                    <div class="mt-2">
-                        <input id="field_of_study" type="text" name="field_of_study" autocomplete="postal-code"
-                            class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
-                    </div>
-                </div>
-            </div>
-
-            {{-- Experience --}}
-            <div class="sm:col-span-2 mt-8">
-                <label for="experience" class="block font-medium text-white text-sm/6">Most important skills, certificates, programming languages, etc.</label>
-                <div class="mt-2">
-                    <textarea id="experience" type="text" name="experience" autocomplete="experience"
-                        class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" >
-                    </textarea>
-                </div>
-            </div>
-        </div>  {{-- linia na dole bloku --}}
-
-        <div class="pb-12 border-b border-white/10">
-            {{-- English --}}
-            <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 mt-8">
-                <div class="sm:col-span-2">
-                    <label for="english" class="block font-medium text-white text-sm/6 ">Level of English</label>
-                    <div class="grid grid-cols-1 mt-2">
-                        <select id="english" autocomplete="english" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white/5 py-1.5 pl-3 pr-8 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 *:bg-gray-800 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6">
-                        <option>A1</option>
-                        <option>A2</option>
-                        <option>B1</option>
-                        <option>B2</option>
-                        <option>C1</option>
-                        <option>C2</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="sm:col-span-2">
-                <label for="another_lang" class="block font-medium text-white text-sm/6">Other languages</label>
-                    <div class="mt-2">
-                        <input id="another_lang" type="text" name="another_lang" autocomplete="another_lang"
-                            class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
-                    </div>
-                </div>
-                <div class="sm:col-span-2">
-                    <label for="another_level" class="block font-medium text-white text-sm/6">Level of those languages</label>
-                    <div class="grid grid-cols-1 mt-2">
-                        <select id="another_level" autocomplete="another_level" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white/5 py-1.5 pl-3 pr-8 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 *:bg-gray-800 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6">
-                        <option>A1</option>
-                        <option>A2</option>
-                        <option>B1</option>
-                        <option>B2</option>
-                        <option>C1</option>
-                        <option>C2</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 mt-8">
-                <div class="sm:col-span-2">
-                        <label class="block font-medium text-gray-300 text-sm/6">A1 - Beginner</label>
-                        <label class="block font-medium text-gray-300 text-sm/6">A2 - Pre-Intermediate</label>
-                        <label class="block font-medium text-gray-300 text-sm/6">B1 - Intermediate</label>
-                        <label class="block font-medium text-gray-300 text-sm/6">B2 - Upper-Intermediate</label>
-                        <label class="block font-medium text-gray-300 text-sm/6">C1 - Advanced</label>
-                        <label class="block font-medium text-gray-300 text-sm/6">C2 - Proficient</label>
-                    </div>
-            </div>
-        </div>
-        {{-- koniec linia na dole bloku --}}
 
         {{-- SHIFT WORK --}}
         <div class="flex items-center mt-8">
@@ -253,17 +108,6 @@
             </div>
         </div>
 
-        {{-- SALARY --}}
-         <div class="sm:col-span-2 mt-8">
-            <div class="flex">
-                <div class="flex items-center ">
-                    <label for="salary" class="block mb-2 mr-6 text-sm font-medium text-gray-900 dark:text-white">Salary Expectations (gross, zł)</label>
-                </div>
-                <div class="flex items-center ">
-                    <input type="number" id="salary" aria-describedby="helper-text-explanation" class="w-24 p-2.5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                </div>
-            </div>
-        </div>
 
             {{-- PL Upload file --}}
         <div class="sm:col-span-2 mt-8">
