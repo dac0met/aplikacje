@@ -40,7 +40,7 @@ class ApplicantFormComponent extends Component
     public int $salary = 0;
     public $selected_job_positions = [];            // <-- przechowuje zaznaczone ID‑y
     public $consent = false;
-    public $rodo = false;   // checkbox RODO nic nie zapisuje w bazie danych, uaktywnia przycisk submit
+    public $rodo = false;   // checkbox RODO nic nie zapisuje w bazie danych, uaktywnia przycisk submit, jest zerowany
     public Collection $jobPositions;                // lista wszystkich pozycji (do wyświetlenia)
     public $cv_pl;
     public $cv_gb;                               // holds the temporary upload
@@ -89,40 +89,31 @@ class ApplicantFormComponent extends Component
     }
 
 
-
-
     // ---------- akcje ----------
     public function submit()
     {
         $this->validate();
 
-        // $dbPathPl = null;
-        // $origFilenamePl = null;
-    
-        // if ($this->cv_pl) {
-        //     $ulid = (string) Str::ulid();
-    
-        //     $extensionPl = $this->cv_pl->getClientOriginalExtension();
-        //     $fileNamePl  = $ulid . '.' . $extensionPl;
-        //     $this->cv_pl->storeAs('pl', $fileNamePl, 'local');
-    
-        //     $dbPathPl = 'pl/' . $fileNamePl;
-        //     $origFilenamePl = $this->cv_pl->getClientOriginalName();
-        // }
-
-
-
+        $dbPathPl = null;
+        $origFilenamePl = null;
         $ulid = (string) Str::ulid();
 
-        $extensionPl = $this->cv_pl->getClientOriginalExtension();
-        $fileNamePl  = $ulid . '.' . $extensionPl;
-        $this->cv_pl->storeAs('pl', $fileNamePl, 'local');
-        $dbPathPl = 'pl/' . $fileNamePl;
+        // cv_pl nie jest wymagane
+        if ($this->cv_pl) 
+        {
+            $extensionPl = $this->cv_pl->getClientOriginalExtension();
+            $fileNamePl  = $ulid . '.' . $extensionPl;
+            $this->cv_pl->storeAs('pl', $fileNamePl, 'local');
+    
+            $dbPathPl = 'pl/' . $fileNamePl;
+            $origFilenamePl = $this->cv_pl->getClientOriginalName();
+        }
 
         $extensionGb = $this->cv_gb->getClientOriginalExtension();
         $fileNameGb  = $ulid . '.' . $extensionGb;
         $this->cv_gb->storeAs('gb', $fileNameGb, 'local');
         $dbPathGb = 'gb/' . $fileNameGb;
+        $origFilenameGb = $this->cv_gb->getClientOriginalName();
 
         // zapisujemy kandydata
         $applicant = Applicant::create([
@@ -145,13 +136,12 @@ class ApplicantFormComponent extends Component
             'salary'             => $this->salary,
             'consent'            => $this->consent,
             'cv_pl'              => $dbPathPl,
-            'orig_filename_pl'    => $this->cv_pl->getClientOriginalName(),
+            'orig_filename_pl'    =>$origFilenamePl,
 
             'cv_gb'               => $dbPathGb,
-            'orig_filename_gb'    => $this->cv_gb->getClientOriginalName(),
+            'orig_filename_gb'    =>$origFilenameGb,
             'submitted_date'      => now(),
         ]);
-
 
 
         // Relacja many‑to‑many (zakładamy, że istnieje pivot applicant_job_position)
@@ -165,7 +155,6 @@ class ApplicantFormComponent extends Component
         $this->showModal = true;
 
         $this->resetForm();  // resetuje formularz
-
 
     }
 
@@ -213,6 +202,4 @@ class ApplicantFormComponent extends Component
         // Pobieramy tylko potrzebne kolumny, aby nie obciążać pamięci
         $this->jobPositions = JobPosition::orderBy('name')->get(['id', 'name']);
     }
-
-
 }

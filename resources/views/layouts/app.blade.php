@@ -45,10 +45,11 @@
             </main>
             
             {{-- Sekcje GDPR i RODO --}}
-            <x-gdpr-rodo-sections />
+            @yield('gdpr', view('components.gdpr-rodo-sections'))
+
 
             {{-- Footer --}}
-            <x-footer />
+            @yield('footer', view('components.footer'))
         </div>
 
 
