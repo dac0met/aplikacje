@@ -37,7 +37,6 @@ class ApplicantFactory extends Factory
             'phone'            => $phone,
             'email'            => $this->faker->unique()->safeEmail,
             'consent'          => $this->faker->randomElement(['current', 'future']),
-            // 'consent'          => $this->faker->randomElement(['yes', 'no']),
             'education'        => $this->faker->randomElement(['High School', 'Bachelor', 'Master', 'PhD']),
             'university'       => $this->faker->company . ' University',
             'field_of_study'   => $this->faker->word,

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('consent_source_id')->constrained()->cascadeOnDelete()->nullable();
             $table->dateTime('submitted_date')->nullable();
             $table->char('user_ip', 15)->nullable();
+            $table->boolean('confirmation')->default(false);            
             $table->string('firstname', 30);
             $table->string('lastname', 30);
             $table->smallInteger('yob')->nullable();	//Year Of Birth
@@ -32,7 +33,7 @@ return new class extends Migration
             $table->string('another_lang', 30)->nullable();
             $table->string('another_level', 2)->nullable();
             $table->string('experience')->nullable();
-            $table->boolean('shift_work')->default(0);
+            $table->boolean('shift_work')->nullable();
             $table->integer('salary')->nullable();			//oczekiwania finansowe
             $table->string('cv_pl', 150)->nullable();
             $table->string('cv_gb', 150)->nullable();

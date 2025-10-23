@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Applicants\Tables;
 
+use App\Models\Applicant;
 use Filament\Tables\Table;
 use App\Enums\ProductStatusEnum;
 use Filament\Actions\EditAction;
@@ -11,6 +12,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Tables\Filters\Filter;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Forms\Components\DatePicker;
@@ -37,6 +39,15 @@ class ApplicantsTable
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->limit(15),
 
+                IconColumn::make('confirmation')
+                    ->label('Confirmed')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-check-circle')
+                    ->falseIcon('heroicon-o-x-circle')
+                    ->alignCenter()
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->sortable(),
+
                 TextColumn::make('submitted_date')
                     ->label('Submitted')
                     ->date('d-m-Y')
@@ -54,7 +65,7 @@ class ApplicantsTable
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
-                
+
                 TextColumn::make('yob')
                     ->label('Year of Birth')
                     // ->mask('9999')
@@ -96,7 +107,7 @@ class ApplicantsTable
                     ->formatStateUsing(fn ( ?\App\Models\Applicant $record ) => $record
                         ? $record->jobPositions->pluck('name')->join(', ')
                         : null),
-                
+
                 TextColumn::make('education')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: false)
@@ -146,10 +157,13 @@ class ApplicantsTable
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
 
-                BooleanColumn::make('shift_work')
+                IconColumn::make('shift_work')
                     ->label('Shift Work')
-                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->boolean()
+                    ->trueIcon('heroicon-o-check-circle')
+                    ->falseIcon('heroicon-o-x-circle')
                     ->alignCenter()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
 
                 TextColumn::make('consent')
@@ -179,7 +193,7 @@ class ApplicantsTable
                     ->label('CV Filename gb')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(),    
+                    ->sortable(),
 
                 TextColumn::make('cv_pl')
                     // ->getStateUsing(fn (array $record): string => $record['name'] . ' ' . $record['surname'])
@@ -249,7 +263,7 @@ class ApplicantsTable
             ], layout: FiltersLayout::AboveContent)
             ->reorderableColumns()
             ->recordActions([
-                ActionGroup::make([ 
+                ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make(),
                     DeleteAction::make(),
@@ -258,7 +272,7 @@ class ApplicantsTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
-                    
+
                 ]),
             ]);
     }

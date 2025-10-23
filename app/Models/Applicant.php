@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Applicant extends Model
 {
     use HasFactory; // HasRelationships;
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -23,6 +23,7 @@ class Applicant extends Model
         'consent_source_id',
         'submitted_date',
         'user_ip',
+        'confirmation',
         'firstname',
         'lastname',
         'yob',
@@ -53,6 +54,7 @@ class Applicant extends Model
         'gender',
         'gross',
         'notes',
+
     ];
 
     public function consentSource() : BelongsTo
@@ -72,7 +74,7 @@ class Applicant extends Model
             'applicant_id',
             'job_position_id');
     }
-    
+
     /** @return string */
     public function getPositionsAttribute(): string
     {
@@ -80,12 +82,12 @@ class Applicant extends Model
             ->pluck('name')
             ->join("\n");       // nowa linia – idealna dla Textarea
     }
-    
+
     // protected static function booted()
     // {
     //     static::creating(function ($applicant) {
     //         \Log::debug('Applicant data before save', $applicant->attributesToArray());
     //     });
     // }
-    
+
 }

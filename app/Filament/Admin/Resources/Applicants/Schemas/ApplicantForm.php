@@ -3,23 +3,24 @@
 namespace App\Filament\Admin\Resources\Applicants\Schemas;
 
 use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Form;
-use Filament\Actions\Action;
 use Filament\Schemas\Schema;
-use App\Models\ConsentSource;
+// removed Button-based action; using built-in FileUpload downloadable instead
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Textarea;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
+use Filament\Forms\Components\Placeholder;
+use Illuminate\Support\HtmlString;
 use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Component;
 use Filament\Forms\Components\DateTimePicker;
+
 
 class ApplicantForm
 {
@@ -62,7 +63,7 @@ class ApplicantForm
                             ->inline()
                             ->default(null),
 
-                        TextInput::make('yob')
+                        TextInput::make('yob')->label('Year of birth')
                             ->columnspan(1)
                             ->mask('9999')
                             ->default(null),
@@ -132,7 +133,7 @@ class ApplicantForm
                                 } else {
                                     $component->state($state); // zachowujemy dotychczasowy stan (pusty)
                                 }
-                            }),    
+                            }),
 
                         TextInput::make('education')
                             ->columnspan(4)
@@ -149,12 +150,12 @@ class ApplicantForm
                         Select::make('english')
                             ->columnspan(2)
                             ->options([
-                                'a1' => 'A1',
-                                'a2' => 'A2',
-                                'b1' => 'B1',
-                                'b2' => 'B2',
-                                'c1' => 'C1',
-                                'c2' => 'C2',
+                                'A1' => 'A1',
+                                'A2' => 'A2',
+                                'B1' => 'B1',
+                                'B2' => 'B2',
+                                'C1' => 'C1',
+                                'C2' => 'C2',
                             ])
                             ->native(false)
                             ->default(null),
@@ -202,16 +203,16 @@ class ApplicantForm
 
             // *******  obszar plików CV  ***********************************************
                 Fieldset::make('')->columnSpan('full')
-                    ->columns(2)
+                    ->columns(4)
                     ->schema([
 
-                //  PL – polska wersja CV
-                // ------------------------------
+                        //  PL – polska wersja CV
+                        // ------------------------------
                         FileUpload::make('cv_pl')
-                            ->columns(1)
+                            // ->columns()
                             ->multiple(false)
                             ->storeFileNamesIn('orig_filename_pl')
-                            ->downloadable()
+                            ->downloadable(false)
                             ->acceptedFileTypes([
                                 'application/pdf',
                                 'application/msword',
@@ -221,14 +222,22 @@ class ApplicantForm
                             ->disk('local')
                             ->directory('pl')
                             ->visibility('private'),
+                        Placeholder::make('download_cv_pl_link')
+                            // ->columns(1)
+                            ->columnSpan(1)
+                            ->hidden(fn ($record) => !($record && $record->cv_pl))
+                            ->content(fn ($record) => $record ? new HtmlString('<a href="' . URL::temporarySignedRoute('applicants.download.cv_pl', now()->addMinutes(10), $record) . '" class="text-primary-600 underline">Pobierz CV (pl)</a>') : '' )
+                            ->extraAttributes(['class' => 'py-2'])
+                            ->disableLabel(),
 
-                //   GB – angielska wersja CV
-                // ----------------------------------
+
+                        //   GB – angielska wersja CV
+                        // ----------------------------------
                         FileUpload::make('cv_gb')
-                            ->columns(1)
+                            // ->columns(1)
                             ->multiple(false)
                             ->storeFileNamesIn('orig_filename_gb')
-                            ->downloadable()
+                            // ->downloadable()
                             ->acceptedFileTypes([
                                 'application/pdf',
                                 'application/msword',
@@ -237,7 +246,17 @@ class ApplicantForm
                             ])
                             ->disk('local')
                             ->directory('gb')
-                            ->visibility('private')
+                            ->visibility('private'),
+
+                        Placeholder::make('download_cv_gb_link')
+                            // ->columns(1)
+                            // ->badge()
+                            ->columnSpan(1)
+                            ->hidden(fn ($record) => !($record && $record->cv_gb))
+                            ->content(fn ($record) => $record ? new HtmlString('<a href="' . URL::temporarySignedRoute('applicants.download.cv_gb', now()->addMinutes(10), $record) . '" class="text-primary-600 underline">Pobierz CV (ang.)</a>') : '' )
+                            ->extraAttributes(['class' => 'py-2 mt-10'])
+                            ->disableLabel(),
+
                     ]),
 
 
@@ -263,7 +282,6 @@ class ApplicantForm
                         TextInput::make('interview')
                             ->default(null),
                 ]),
-
 
             ])
         ;
