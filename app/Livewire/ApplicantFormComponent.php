@@ -47,6 +47,16 @@ class ApplicantFormComponent extends Component
     public int $fileInputKey = 0;                // forces file input DOM reset
     public int $formKey = 0;                     // forces whole form re-render
 
+    public int $consent_source_id;
+
+    // Honeypot
+    public $website; // boty często wypełniają takie pole
+
+    // Captcha
+    public $captchaQuestion;
+    public $captchaAnswer;
+    public $expectedAnswer;
+
 
     // ---------- reguły walidacji ----------
     protected function rules(): array
@@ -85,6 +95,8 @@ class ApplicantFormComponent extends Component
                 'max:640',                                 // 512 KB (Livewire works in kilobytes)
                 'mimes:pdf,doc,docx,odt',                  // allowed extensions
             ],
+
+            'captchaAnswer' => 'required|numeric',
         ];
     }
 
@@ -94,17 +106,19 @@ class ApplicantFormComponent extends Component
     {
         $this->validate();
 
+        $consent_source_id = 1;         // źródło zgody pochodzi z formularza firmowego
+
         $dbPathPl = null;
         $origFilenamePl = null;
         $ulid = (string) Str::ulid();
 
         // cv_pl nie jest wymagane
-        if ($this->cv_pl) 
+        if ($this->cv_pl)
         {
             $extensionPl = $this->cv_pl->getClientOriginalExtension();
             $fileNamePl  = $ulid . '.' . $extensionPl;
             $this->cv_pl->storeAs('pl', $fileNamePl, 'local');
-    
+
             $dbPathPl = 'pl/' . $fileNamePl;
             $origFilenamePl = $this->cv_pl->getClientOriginalName();
         }
@@ -114,6 +128,19 @@ class ApplicantFormComponent extends Component
         $this->cv_gb->storeAs('gb', $fileNameGb, 'local');
         $dbPathGb = 'gb/' . $fileNameGb;
         $origFilenameGb = $this->cv_gb->getClientOriginalName();
+
+        // Sprawdzenie honeypot
+        if (!empty($this->website)) {
+            // Bot – przerywamy
+            return back()->withErrors(['error' => 'Spam detected.']);
+        }
+
+        // Sprawdzenie captcha
+        if ((int)$this->captchaAnswer !== $this->expectedAnswer) {
+            $this->addError('captchaAnswer', 'Niepoprawna odpowiedź.');
+            $this->generateCaptcha();
+            return;
+        }
 
         // zapisujemy kandydata
         $applicant = Applicant::create([
@@ -141,6 +168,8 @@ class ApplicantFormComponent extends Component
             'cv_gb'               => $dbPathGb,
             'orig_filename_gb'    =>$origFilenameGb,
             'submitted_date'      => now(),
+            'consent_source_id'   =>$consent_source_id,
+
         ]);
 
 
@@ -155,6 +184,8 @@ class ApplicantFormComponent extends Component
         $this->showModal = true;
 
         $this->resetForm();  // resetuje formularz
+
+        $this->generateCaptcha();
 
     }
 
@@ -201,5 +232,14 @@ class ApplicantFormComponent extends Component
     {
         // Pobieramy tylko potrzebne kolumny, aby nie obciążać pamięci
         $this->jobPositions = JobPosition::orderBy('name')->get(['id', 'name']);
+        $this->generateCaptcha();
+    }
+
+    public function generateCaptcha()
+    {
+        $a = rand(1, 9);
+        $b = rand(1, 9);
+        $this->captchaQuestion = "Enter the result of the operation below: $a + $b?";
+        $this->expectedAnswer = $a + $b;
     }
 }

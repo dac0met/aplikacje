@@ -1,8 +1,8 @@
 {{-- Komponent sekcji GDPR i RODO --}}
-<div class="max-w-8xl mx-auto  px-4 sm:px-6 lg:px-8 bg-gray-400 dark:bg-gray-900 mb-8">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<div class="max-w-7xl mx-auto  px-4 sm:px-6 lg:px-8 bg-gray-400 dark:bg-gray-900 mb-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-9">
         {{-- Sekcja GDPR --}}
-        <div class="bg-white/80 dark:bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+        <div class="bg-white/80 dark:bg-gray-800 rounded-lg shadow-lg p-8 border border-gray-200 dark:border-gray-700">
             <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 text-center">GDPR Information</h3>
             <ol class="space-y-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 list-decimal list-outside ml-6">
                 <li>The administrator of personal data is Przedsiębiorstwo Wielobranżowe DACOMET D.Kaczmarek, A.Spychalski Sp.j. with its registered seat in Bydgoszcz, address: Fordonska Street 24, apartment 12, phone +48 52 360 1111, e-mail biuro@dacomet.pl</li>
@@ -16,7 +16,7 @@
         </div>
 
         {{-- Sekcja RODO --}}
-        <div class="bg-white/80 dark:bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+        <div class="bg-white/80 dark:bg-gray-800 rounded-lg shadow-lg p-8 border border-gray-200 dark:border-gray-700">
             <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 text-center">Informacja RODO</h3>
             <ol class="space-y-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 list-decimal list-outside ml-6">
                 <li>Administratorem danych osobowych jest Przedsiębiorstwo Wielobranżowe DACOMET D.Kaczmarek A.Spychalski sp. j. z siedzibą w Bydgoszczy, ul. Fordońska 24 lok. 12, tel. +48 52 360 1111, e-mail biuro@dacomet.pl</li>

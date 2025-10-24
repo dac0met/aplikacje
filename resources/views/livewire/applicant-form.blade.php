@@ -268,15 +268,14 @@
 
             {{-- salary --}}
             <div class="sm:col-span-2 mt-8">
-                <label for="phone" class="block font-medium text-gray-900 dark:text-white text-sm/6">Salary Expectations (gross, zł)
+                <label for="salary" class="block font-medium text-gray-900 dark:text-white text-sm/6">Salary Expectations (gross, zł)
                 </label>
                 <div class="grid grid-cols-1  gap-x-6 gap-y-8 sm:grid-cols-6">
                 <div class="mt-2">
-                    <input id="salary" type="text"
+                    <input id="salary" type="number"
                         wire:model.defer="salary"
-                        {{-- autocomplete="phone" --}}
                         class="block w-full rounded-md bg-white dark:bg-gray-700 px-3 py-1.5 text-base text-gray-900 dark:text-white outline outline-1 -outline-offset-1 outline-gray-300 dark:outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
-                    @error('phone') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+                    @error('salary') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
                 </div>
                 </div>
             </div>
@@ -374,8 +373,27 @@
                     </span>
                 </label>
                 @error('consent') <p class="mt-1 text-red-600">{{ $message }}</p> @enderror
-                
+
             </div>
+
+
+             {{-- Honeypot (ukryte pole) --}}
+             <div style="display:none;">
+                <input type="text" wire:model="website" autocomplete="off">
+            </div>
+
+            {{-- Captcha --}}
+            <div>
+                <label for="captcha" class="block font-medium text-gray-900 dark:text-white text-sm/6">
+                    {{ $captchaQuestion }} <span class="text-red-600">*</span>
+                </label>
+                <div class="mt-2">
+                    <input id="captcha" type="text" wire:model.defer="captchaAnswer"
+                        class="block w-full rounded-md bg-white dark:bg-gray-700 px-3 py-1.5 text-base text-gray-900 dark:text-white outline outline-1 -outline-offset-1 outline-gray-300 dark:outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
+                    @error('captchaAnswer') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+                </div>
+            </div>
+            
 
             {{-- checkbox RODO nic nie zapisuje w bazie danych, tylko uaktywnia przycisk 'submit' --}}
             <div class="flex items-center ">
