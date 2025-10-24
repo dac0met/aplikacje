@@ -37,7 +37,7 @@ class ApplicantFormComponent extends Component
     public string $another_lang = '';
     public string $another_level = '';
     public $shift_work = null;
-    public int $salary = 0;
+    public ?int $salary = null;
     public $selected_job_positions = [];            // <-- przechowuje zaznaczone ID‑y
     public $consent = false;
     public $rodo = false;   // checkbox RODO nic nie zapisuje w bazie danych, uaktywnia przycisk submit, jest zerowany

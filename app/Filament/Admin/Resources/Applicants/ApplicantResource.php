@@ -18,7 +18,7 @@ class ApplicantResource extends Resource
 {
     protected static ?string $model = Applicant::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::UserGroup;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::UserCircle;
 
     protected static ?string $recordTitleAttribute = 'Last Name';
 
