@@ -216,6 +216,7 @@ class ApplicantFormComponent extends Component
             'rodo',
             'cv_pl',                         // clear temporary upload reference
             'cv_gb',                         // clear temporary upload reference
+            'captchaAnswer',
         ]);
 
         //  $this->shift_work = false;
