@@ -13,6 +13,7 @@ use Filament\Forms\Components\Textarea;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Filament\Forms\Components\Placeholder;
+use Filament\Schemas\Components\View;
 use Illuminate\Support\HtmlString;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
@@ -222,14 +223,14 @@ class ApplicantForm
                             ->disk('local')
                             ->directory('pl')
                             ->visibility('private'),
-                        Placeholder::make('download_cv_pl_link')
-                            // ->columns(1)
+                        View::make('filament.forms.download-link')
                             ->columnSpan(1)
                             ->hidden(fn ($record) => !($record && $record->cv_pl))
-                            ->content(fn ($record) => $record ? new HtmlString('<a href="' . URL::temporarySignedRoute('applicants.download.cv_pl', now()->addMinutes(10), $record) . '" class="text-primary-600 underline">Pobierz CV (pl)</a>') : '' )
                             ->extraAttributes(['class' => 'py-2'])
-                            ->disableLabel(),
-
+                            ->viewData(fn ($record) => [
+                                'url' => $record ? URL::temporarySignedRoute('applicants.download.cv_pl', now()->addMinutes(10), $record) : null,
+                                'label' => 'Pobierz CV (pl)',
+                            ]),
 
                         //   GB – angielska wersja CV
                         // ----------------------------------
@@ -247,15 +248,23 @@ class ApplicantForm
                             ->disk('local')
                             ->directory('gb')
                             ->visibility('private'),
-
-                        Placeholder::make('download_cv_gb_link')
-                            // ->columns(1)
-                            // ->badge()
+                        View::make('filament.forms.download-link')
                             ->columnSpan(1)
                             ->hidden(fn ($record) => !($record && $record->cv_gb))
-                            ->content(fn ($record) => $record ? new HtmlString('<a href="' . URL::temporarySignedRoute('applicants.download.cv_gb', now()->addMinutes(10), $record) . '" class="text-primary-600 underline">Pobierz CV (ang.)</a>') : '' )
-                            ->extraAttributes(['class' => 'py-2 mt-10'])
-                            ->disableLabel(),
+                            ->extraAttributes(['class' => 'py-2'])
+                            ->viewData(fn ($record) => [
+                                'url' => $record ? URL::temporarySignedRoute('applicants.download.cv_gb', now()->addMinutes(10), $record) : null,
+                                'label' => 'Pobierz CV (ang.)',
+                            ]),
+
+                        // Placeholder::make('download_cv_gb_link')
+                        //     // ->columns(1)
+                        //     // ->badge()
+                        //     ->columnSpan(1)
+                        //     ->hidden(fn ($record) => !($record && $record->cv_gb))
+                        //     ->content(fn ($record) => $record ? new HtmlString('<a href="' . URL::temporarySignedRoute('applicants.download.cv_gb', now()->addMinutes(10), $record) . '" class="text-primary-600 underline">Pobierz CV (ang.)</a>') : '' )
+                        //     ->extraAttributes(['class' => 'py-2 mt-10'])
+                        //     ->disableLabel(),
 
                     ]),
 
