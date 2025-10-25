@@ -2,26 +2,20 @@
 
 namespace App\Filament\Admin\Resources\Applicants\Schemas;
 
-use Filament\Forms\Components\CheckboxList;
 use Filament\Schemas\Schema;
 // removed Button-based action; using built-in FileUpload downloadable instead
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Toggle;
-use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Textarea;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
-use Filament\Forms\Components\Placeholder;
 use Filament\Schemas\Components\View;
-use Illuminate\Support\HtmlString;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Components\Fieldset;
-use Filament\Schemas\Components\Component;
-use Filament\Forms\Components\DateTimePicker;
-
+use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ViewEntry;
 
 class ApplicantForm
 {
@@ -32,13 +26,21 @@ class ApplicantForm
                 Fieldset::make('')->columnSpan('full')
                     ->columns(8)
                     ->schema([
+                        IconEntry::make('confirmation')
+                            // ->alignment('center')
+                            ->icon(fn (bool $state) => $state ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle')
+                            ->color(fn (bool $state) => $state ? 'success' : 'danger'),
+                        // ViewEntry::make('confirmation')
+                        //     ->view('filament.forms.confirmation-icon'),
+                            
                         TextInput::make('user_ip')
                             ->columnspan(1)
                             ->readOnly(true)
                             ->rule('ipv4'),
                         TextInput::make('id')
                             ->readOnly(true),
-                    ]),
+                        
+                    ])->extraAttributes(['class' => 'text-center']),
 
             // *******  obszar 1    ***********************************************
                 Fieldset::make('')->columnSpan('full')
