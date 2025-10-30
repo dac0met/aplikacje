@@ -3,29 +3,35 @@
 namespace App\Filament\Admin\Resources\Applicants\Tables;
 
 use App\Models\Applicant;
-use Filament\Tables\Table;
-use App\Enums\ProductStatusEnum;
+use App\Traits\GeneratesSearchHashes;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Actions\ActionGroup;
-use Filament\Actions\DeleteAction;
-use Filament\Tables\Filters\Filter;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
-use Filament\Forms\Components\DatePicker;
-use Filament\Tables\Columns\SelectColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Tables\Columns\BooleanColumn;
+use Filament\Forms\Components\TextInput;
 
 class ApplicantsTable
 {
+    use GeneratesSearchHashes;
+
+
     public static function configure(Table $table): Table
     {
         return $table
+            ->header(view('components.table-header-pagination', [
+                'table' => $table
+            ]))
             ->columns([
                 // Primary key
                 TextColumn::make('id')
@@ -56,15 +62,19 @@ class ApplicantsTable
 
                 TextColumn::make('firstname')
                     ->label('First Name')
-                    ->searchable()
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        return $query->searchByFirstname($search);
+                    })
                     ->toggleable(isToggledHiddenByDefault: false)
-                    ->sortable(),
+                    ->sortable(false), // Wyłączamy sortowanie po hashach
 
                 TextColumn::make('lastname')
                     ->label('Last Name')
-                    ->searchable()
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        return $query->searchByLastname($search);
+                    })
                     ->toggleable(isToggledHiddenByDefault: false)
-                    ->sortable(),
+                    ->sortable(false), // Wyłączamy sortowanie po hashach
 
                 TextColumn::make('yob')
                     ->label('Year of Birth')
@@ -93,20 +103,26 @@ class ApplicantsTable
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
 
-                TextColumn::make('jobposition.name')
-                    ->label('Job Position')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: false)
-                    ->sortable(),
-
-                // Kolumna z nazwami stanowisk
+                // Kolumna z nazwami stanowisk (many-to-many)
                 TextColumn::make('position')
-                    ->label('Stanowiska')
+                    ->label('Selected positions')
                     ->searchable()
                     ->sortable()
-                    ->formatStateUsing(fn ( ?\App\Models\Applicant $record ) => $record
-                        ? $record->jobPositions->pluck('name')->join(', ')
-                        : null),
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->wrap()
+                    ->getStateUsing(function (Applicant $record) {
+                        return $record->jobPositions
+                            ? $record->jobPositions->pluck('name')->join(', ')
+                            : null;
+                    }),
+
+                // TextColumn::make('jobposition.name')
+                //     ->label('Job Position')
+                //     ->columnSpan(4)
+                //     ->searchable()
+                //     ->wrap()
+                //     ->toggleable(isToggledHiddenByDefault: false)
+                //     ->sortable(),
 
                 TextColumn::make('education')
                     ->searchable()
@@ -232,10 +248,27 @@ class ApplicantsTable
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
 
-            ])->defaultSort('id','DESC')
+            ])->paginated([5, 10, 25, 50])
+            ->defaultSort('id','DESC')
+            ->modifyQueryUsing(fn (Builder $query) => $query->with('jobPositions'))
             ->filters([
-                SelectFilter::make('position')
-                    ->relationship('jobposition','name'),
+                SelectFilter::make('positions')
+                    ->label('Positions')
+                    // ->multiple()
+                    ->relationship('jobPositions','name')
+                    ->preload()
+                    ->searchable()
+                    ->columnSpan(2),
+                
+                SelectFilter::make('english')->label('english level')
+                    ->options(fn ():Array => Applicant::query()
+                    ->select('english')
+                    ->orderBy('english', 'asc')
+                    ->distinct()->get()->pluck('english', 'english')->toArray()),
+
+                TernaryFilter::make('shift_work')->queries(
+                    true: fn (Builder $query) => $query->where('shift_work',true),
+                    false: fn (Builder $query) => $query->where('shift_work',false),),
 
                 Filter::make('created_from')
                     ->schema([
@@ -260,8 +293,12 @@ class ApplicantsTable
                                 fn (Builder $query, $date): Builder => $query->whereDate('submitted_date', '<=', $date),
                             );
                     }),
-            ], layout: FiltersLayout::AboveContent)
+
+            ], layout: FiltersLayout::AboveContent)  // filtry nad tabelą + możliwość zwinięcia
+            ->deferFilters(false)
+            ->persistFiltersInSession() //utrzymanie filtra w sesji użytkownika
             ->reorderableColumns()
+            ->filtersFormColumns(8)
             ->recordActions([
                 ActionGroup::make([
                     ViewAction::make(),
@@ -269,6 +306,7 @@ class ApplicantsTable
                     DeleteAction::make(),
                 ])
             ])
+            
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

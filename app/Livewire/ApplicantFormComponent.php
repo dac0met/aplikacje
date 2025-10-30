@@ -12,6 +12,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;                   // for random filenames
+use Illuminate\Support\Facades\Validator;     // for pre-submit check
 
 
 class ApplicantFormComponent extends Component
@@ -19,7 +20,9 @@ class ApplicantFormComponent extends Component
 
     use WithFileUploads;                       // ← enables $this->cv_gb handling
 
-    public $showModal = false;   // steruje widocznością modala
+    public $showModal = false;   // steruje widocznością modala (sukces)
+    public $showMissingModal = false; // steruje widocznością modala (brakujące pola)
+    public array $missingFields = []; // lista brakujących pól
 
     // ---------- właściwości formularza ----------
     public string $firstname = '';
@@ -47,6 +50,9 @@ class ApplicantFormComponent extends Component
     public int $fileInputKey = 0;                // forces file input DOM reset
     public int $formKey = 0;                     // forces whole form re-render
 
+    public int $maxPositions = 3;                // maksymalna liczba pozycji do wyboru
+    public bool $tooManyPositions = false;       // flaga do komunikatu w UI
+
     public int $consent_source_id;
 
     // Honeypot
@@ -64,9 +70,9 @@ class ApplicantFormComponent extends Component
         return [
             'firstname'          => ['required', 'string', 'max:30'],
             'lastname'           => ['required', 'string', 'max:30'],
-            'city'               => ['nullable', 'string', 'max:30'],
+            'city'               => ['required', 'string', 'max:30'],
             'phone'              => ['nullable', 'string', 'max:30'],
-            'email'              => ['nullable', 'email', 'max:50'],
+            'email'              => ['required', 'email', 'max:50'],
             'job_position_id'    => ['nullable', 'exists:job_positions,id'],
             'education'          => ['required', 'string', 'max:30'],
             'university'         => ['required', 'string', 'max:191'],
@@ -80,7 +86,7 @@ class ApplicantFormComponent extends Component
             'consent'         => ['required', 'string', 'in:current,future'],
 
             'selected_job_positions.*'=> ['integer', Rule::exists('job_positions', 'id')],
-            'selected_job_positions'   => ['array', 'min:1'],   // opcjonalnie wymóg przynajmniej jednego zaznaczenia:
+            'selected_job_positions'   => ['array', 'min:1', 'max:3'],   // opcjonalnie wymóg przynajmniej jednego zaznaczenia:
 
             'cv_pl' => [
                 'nullable',
@@ -98,6 +104,91 @@ class ApplicantFormComponent extends Component
 
             'captchaAnswer' => 'required|numeric',
         ];
+    }
+
+
+    // ---------- pre‑submit: pokaż modal z brakującymi polami ----------
+    public function preSubmit(): void
+    {
+        $this->resetErrorBag();
+        $this->resetValidation();
+        $this->missingFields = [];
+
+        $data = [
+            'firstname' => $this->firstname,
+            'lastname' => $this->lastname,
+            'city' => $this->city,
+            'phone' => $this->phone,
+            'email' => $this->email,
+            'job_position_id' => $this->job_position_id,
+            'education' => $this->education,
+            'university' => $this->university,
+            'field_of_study' => $this->field_of_study,
+            'experience' => $this->experience,
+            'english' => $this->english,
+            'another_lang' => $this->another_lang,
+            'another_level' => $this->another_level,
+            'shift_work' => $this->shift_work,
+            'salary' => $this->salary,
+            'consent' => $this->consent,
+            'selected_job_positions' => $this->selected_job_positions,
+            'cv_pl' => $this->cv_pl,
+            'cv_gb' => $this->cv_gb,
+            'captchaAnswer' => $this->captchaAnswer,
+        ];
+
+        $validator = Validator::make($data, $this->rules());
+
+        if ($validator->fails()) {
+            $labels = [
+                'firstname' => 'First name',
+                'lastname' => 'Last name',
+                'city' => 'Place of residence (City)',
+                'email' => 'Email address',
+                'education' => 'Education',
+                'university' => 'University',
+                'field_of_study' => 'Field of Study',
+                'experience' => 'Experience',
+                'english' => 'Level of English',
+                'shift_work' => 'Willingness to work in shifts',
+                'consent' => 'Consent option',
+                'selected_job_positions' => 'Position applied for',
+                'cv_gb' => 'Resume in English',
+                'captchaAnswer' => 'Captcha answer',
+            ];
+
+            // Sprawdzamy tylko pola wymagane (nieuzupełnione)
+            foreach ($labels as $field => $label) {
+                $valueMissing = false;
+                if ($field === 'selected_job_positions') {
+                    $valueMissing = empty($this->selected_job_positions);
+                } elseif ($field === 'shift_work') {
+                    $valueMissing = $this->shift_work === null || $this->shift_work === '';
+                } elseif ($field === 'cv_gb') {
+                    $valueMissing = empty($this->cv_gb);
+                } else {
+                    $val = $this->$field ?? null;
+                    $valueMissing = ($val === null || $val === '');
+                }
+
+                if ($valueMissing && $validator->errors()->has($field)) {
+                    $this->missingFields[] = $label;
+                }
+            }
+        }
+
+        if (!empty($this->missingFields)) {
+            $this->showMissingModal = true;
+            return; // nie wysyłamy formularza
+        }
+
+        // brak braków – kontynuujemy standardowe submit
+        $this->submit();
+    }
+
+    public function closeMissingModal(): void
+    {
+        $this->showMissingModal = false;
     }
 
 
@@ -229,6 +320,27 @@ class ApplicantFormComponent extends Component
         return view('livewire.applicant-form');
     }
 
+    public function updated($name): void
+    {
+        if (Str::startsWith($name, 'selected_job_positions')) {
+            $this->enforceMaxPositions();
+        }
+    }
+
+    public function enforceMaxPositions(): void
+    {
+        $arr = $this->selected_job_positions ?? [];
+        if (!is_array($arr)) {
+            $arr = [];
+        }
+        if (count($arr) > $this->maxPositions) {
+            $this->selected_job_positions = array_slice($arr, 0, $this->maxPositions);
+            $this->tooManyPositions = true;
+        } else {
+            $this->tooManyPositions = false;
+        }
+    }
+
     public function mount()
     {
         // Pobieramy tylko potrzebne kolumny, aby nie obciążać pamięci
@@ -242,5 +354,10 @@ class ApplicantFormComponent extends Component
         $b = rand(1, 9);
         $this->captchaQuestion = "Enter the result of the operation below: $a + $b?";
         $this->expectedAnswer = $a + $b;
+    }
+
+    public function getSelectedCountProperty(): int
+    {
+        return is_array($this->selected_job_positions) ? count($this->selected_job_positions) : 0;
     }
 }

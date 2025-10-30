@@ -13,7 +13,7 @@ class ApplicantSeeder extends Seeder
      */
     public function run(): void
     {
-        $count = 50;
+        $count = 500;
 
         Applicant::factory()
                  ->count($count)

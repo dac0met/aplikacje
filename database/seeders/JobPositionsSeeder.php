@@ -14,15 +14,39 @@ class JobPositionsSeeder extends Seeder
     public function run(): void
     {
         JobPosition::factory()->create([
-            'name' => 'Developper',
+            'name' => 'Customer Service Specialist With Foreign Languages',
         ]);
 
         JobPosition::factory()->create([
-            'name' => 'Office Call Center Operator',
+            'name' => 'Software Developer With VBA Experience',
         ]);
 
         JobPosition::factory()->create([
-            'name' => 'Tester',
+            'name' => 'Hardware Services Inventory Planner',
+        ]);
+
+        JobPosition::factory()->create([
+            'name' => 'GSMR Test Engineer',
+        ]);
+
+        JobPosition::factory()->create([
+            'name' => 'Optical Transmission Test Engineer',
+        ]);
+
+        JobPosition::factory()->create([
+            'name' => 'Front Office Analyst with English and German',
+        ]);
+
+        JobPosition::factory()->create([
+            'name' => 'Network Automation Engineer',
+        ]);
+
+        JobPosition::factory()->create([
+            'name' => 'Optical Transmission Design and Configuration Engineer',
+        ]);
+
+        JobPosition::factory()->create([
+            'name' => 'Monter szaf telekomunikacyjnych',
         ]);
     }
 }

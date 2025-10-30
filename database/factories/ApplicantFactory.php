@@ -19,6 +19,7 @@ class ApplicantFactory extends Factory
         $languages = ['Dutch', 'Polish', 'German', 'Spanish', 'French'];
         $levels    = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
         $ratings   = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        $education = ['masters degree','doctoral degree','engineer','student'];
 
         $salary = [5000, 5500, 6000, 6500, 12000, 7200, 9600,7700, 8500, 4500];
 
@@ -26,7 +27,7 @@ class ApplicantFactory extends Factory
         $phone = $this->faker->unique()->numberBetween(500000000, 799999999);
 
         return [
-            'job_position_id'  => $this->faker->numberBetween(1, 3),
+            'job_position_id'  => $this->faker->numberBetween(1, 9),
             'consent_source_id'=> $this->faker->numberBetween(1, 2),
             'submitted_date'   => $this->faker->dateTimeBetween('-1 year', 'now'),
             'user_ip'          => $this->faker->ipv4,
@@ -37,7 +38,8 @@ class ApplicantFactory extends Factory
             'phone'            => $phone,
             'email'            => $this->faker->unique()->safeEmail,
             'consent'          => $this->faker->randomElement(['current', 'future']),
-            'education'        => $this->faker->randomElement(['High School', 'Bachelor', 'Master', 'PhD']),
+            // 'consent'          => $this->faker->randomElement(['yes', 'no']),
+            'education'        => $this->faker->randomElement($education),
             'university'       => $this->faker->company . ' University',
             'field_of_study'   => $this->faker->word,
             'english'          => $this->faker->randomElement($levels),

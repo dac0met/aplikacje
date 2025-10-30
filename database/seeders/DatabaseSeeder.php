@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             JobPositionsSeeder::class,
             ConsentSourceSeeder::class,
             ApplicantSeeder::class,
+            Applicant_JobPositionSeeder::class,
         ]);
 
     }

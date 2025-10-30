@@ -14,6 +14,10 @@ class JobPositionsTable
     {
         return $table
             ->columns([
+                TextColumn::make("id")
+                    ->label("ID")
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false),
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('filename')

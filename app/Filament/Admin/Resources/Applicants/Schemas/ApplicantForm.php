@@ -26,20 +26,21 @@ class ApplicantForm
                 Fieldset::make('')->columnSpan('full')
                     ->columns(8)
                     ->schema([
-                        IconEntry::make('confirmation')
-                            // ->alignment('center')
-                            ->icon(fn (bool $state) => $state ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle')
-                            ->color(fn (bool $state) => $state ? 'success' : 'danger'),
-                        // ViewEntry::make('confirmation')
-                        //     ->view('filament.forms.confirmation-icon'),
-                            
+                // ******** obszar informacyjny ***********************************
+
+                        Radio::make('confirmation')
+                        ->boolean()
+                        ->inline(true)
+                        ->default(true),
+                        
                         TextInput::make('user_ip')
                             ->columnspan(1)
                             ->readOnly(true)
-                            ->rule('ipv4'),
+                            ->rule('ipv4')
+                            ->default('127.0.0.1'),
                         TextInput::make('id')
                             ->readOnly(true),
-                        
+
                     ])->extraAttributes(['class' => 'text-center']),
 
             // *******  obszar 1    ***********************************************
@@ -47,7 +48,8 @@ class ApplicantForm
                     ->columns(12)
                     ->schema([
                         DatePicker::make('submitted_date')
-                            ->columnspan(2),
+                            ->columnspan(2)
+                            ->default(now()),
 
                         TextInput::make('firstname')
                             ->columnspan(4)
@@ -77,27 +79,6 @@ class ApplicantForm
                             ->relationship('ConsentSource','name')
                             ->default(null),
 
-                        // Select::make('consent_source_id')               // przechowujemy ID rekordu
-                        //     ->label('Source of consent')
-                        //     ->columnspan(4)
-                        //     ->relationship('consentSource', 'label')   // relacja w modelu (patrz niżej), automatycznie pobiera label
-                        //     // ->searchable()                              // możliwość wyszukiwania
-                        //     ->placeholder('Select or enter a new value')
-                        //     ->createOptionForm([                        // Formularz, który pojawi się po wpisaniu nowego tekstu
-                        //         TextInput::make('key')
-                        //             ->required()
-                        //             ->unique(table: ConsentSource::class, column: 'key')
-                        //             ->maxLength(100),
-
-                        //         TextInput::make('label')
-                        //             ->required()
-                        //             ->maxLength(255),
-                        //     ])
-                        //     ->createOptionUsing(fn (array $data) =>                         // Zapisujemy nową opcję i zwracamy jej ID, żeby Select ją od razu wybrał
-                        //         ConsentSource::create($data)->getKey())
-                        //     ->required(),
-
-
                         TextInput::make('city')
                             ->columnspan(6)
                             ->default(null),
@@ -114,19 +95,20 @@ class ApplicantForm
                             ->email()
                             ->default(null),
 
-                        Select::make('job_position_id')
-                            ->label('Position')
+                        Select::make('jobPositions')
+                            ->label('Positions')
                             ->columnspan(6)
-                            ->relationship('jobPosition','name')
-                            ->preload()
-                            ->default(null),
+                            ->relationship('jobPositions','name')
+                            ->multiple()
+                            ->searchable()
+                            ->preload(),
 
                         Textarea::make('position')
+                            ->label('Selected positions')
                             ->columnspan(6)
                             // ->disabled()           // Nie zapisujemy tego pola – służy wyłącznie do wyświetlania
                             ->rows(3)                         // wysokość pola
                             ->placeholder('Brak wybranych stanowisk!')
-                            ->label('Wybrane stanowiska')
                             ->afterStateHydrated(function ($component, $state) {
                                 $record = $component->getRecord();
                                 if ($record && $record->jobPositions) {
@@ -138,8 +120,16 @@ class ApplicantForm
                                 }
                             }),
 
-                        TextInput::make('education')
+                        Select::make('education')
                             ->columnspan(4)
+                            ->options([
+                                'masters degree' => 'Masters degree',
+                                'bachelor degree' => 'Bachelor degree',
+                                'doctoral degree' => 'Doctoral degree',
+                                'engineer' => 'Engineer',
+                                'student' => 'Student',
+                            ])
+                            ->native(false)
                             ->default(null),
 
                         TextInput::make('university')
@@ -259,15 +249,6 @@ class ApplicantForm
                                 'label' => 'Pobierz CV (ang.)',
                             ]),
 
-                        // Placeholder::make('download_cv_gb_link')
-                        //     // ->columns(1)
-                        //     // ->badge()
-                        //     ->columnSpan(1)
-                        //     ->hidden(fn ($record) => !($record && $record->cv_gb))
-                        //     ->content(fn ($record) => $record ? new HtmlString('<a href="' . URL::temporarySignedRoute('applicants.download.cv_gb', now()->addMinutes(10), $record) . '" class="text-primary-600 underline">Pobierz CV (ang.)</a>') : '' )
-                        //     ->extraAttributes(['class' => 'py-2 mt-10'])
-                        //     ->disableLabel(),
-
                     ]),
 
 
@@ -298,3 +279,8 @@ class ApplicantForm
         ;
     }
 }
+
+                        // IconEntry::make('confirmation')
+                        //     // ->alignment('center')
+                        //     ->icon(fn (bool $state) => $state ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle')
+                        //     ->color(fn (bool $state) => $state ? 'success' : 'danger'),
