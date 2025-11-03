@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Admin\Resources\Applicants\Schemas;
+namespace App\Filament\Editor\Resources\Applicants\Schemas;
 
 use Filament\Schemas\Schema;
 // removed Button-based action; using built-in FileUpload downloadable instead
@@ -280,8 +280,3 @@ class ApplicantForm
         ;
     }
 }
-
-                        // IconEntry::make('confirmation')
-                        //     // ->alignment('center')
-                        //     ->icon(fn (bool $state) => $state ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle')
-                        //     ->color(fn (bool $state) => $state ? 'success' : 'danger'),

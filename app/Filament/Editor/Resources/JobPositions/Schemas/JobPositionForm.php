@@ -12,9 +12,10 @@ class JobPositionForm
         return $schema
             ->components([
                 TextInput::make('name')
+                    ->label('Name')
                     ->required(),
                 TextInput::make('filename')
-                    ->required(),
+                    ->label('Filename'),
             ]);
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Filament\Manager\Resources\Applicants;
+namespace App\Filament\Editor\Resources\Applicants;
 
-// use App\Filament\Manager\Resources\Applicants\Pages\CreateApplicant;
-// use App\Filament\Manager\Resources\Applicants\Pages\EditApplicant;
-use App\Filament\Manager\Resources\Applicants\Pages\ListApplicants;
-use App\Filament\Manager\Resources\Applicants\Schemas\ApplicantForm;
-use App\Filament\Manager\Resources\Applicants\Tables\ApplicantsTable;
+use App\Filament\Editor\Resources\Applicants\Pages\CreateApplicant;
+use App\Filament\Editor\Resources\Applicants\Pages\EditApplicant;
+use App\Filament\Editor\Resources\Applicants\Pages\ListApplicants;
+use App\Filament\Editor\Resources\Applicants\Schemas\ApplicantForm;
+use App\Filament\Editor\Resources\Applicants\Tables\ApplicantsTable;
 use App\Models\Applicant;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -32,19 +32,24 @@ class ApplicantResource extends Resource
         return ApplicantsTable::configure($table);
     }
 
-    public static function getRelations(): array
+    // public static function getRelations(): array
+    // {
+    //     return [
+    //         //
+    //     ];
+    // }
+
+     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        return [
-            //
-        ];
+        return parent::getEloquentQuery()->with('jobPositions');
     }
 
     public static function getPages(): array
     {
         return [
             'index' => ListApplicants::route('/'),
-            // 'create' => CreateApplicant::route('/create'),
-            // 'edit' => EditApplicant::route('/{record}/edit'),
+            'create' => CreateApplicant::route('/create'),
+            'edit' => EditApplicant::route('/{record}/edit'),
         ];
     }
 }

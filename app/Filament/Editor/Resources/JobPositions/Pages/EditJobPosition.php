@@ -4,7 +4,7 @@ namespace App\Filament\Editor\Resources\JobPositions\Pages;
 
 use App\Filament\Editor\Resources\JobPositions\JobPositionResource;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\ViewAction;
+// use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditJobPosition extends EditRecord
@@ -14,7 +14,7 @@ class EditJobPosition extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            ViewAction::make(),
+            // ViewAction::make(),
             DeleteAction::make(),
         ];
     }

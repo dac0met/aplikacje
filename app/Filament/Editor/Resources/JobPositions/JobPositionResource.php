@@ -51,7 +51,6 @@ class JobPositionResource extends Resource
         return [
             'index' => ListJobPositions::route('/'),
             'create' => CreateJobPosition::route('/create'),
-            'view' => ViewJobPosition::route('/{record}'),
             'edit' => EditJobPosition::route('/{record}/edit'),
         ];
     }

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Manager\Resources\Applicants\Pages;
+namespace App\Filament\Editor\Resources\Applicants\Pages;
 
-use App\Filament\Manager\Resources\Applicants\ApplicantResource;
+use App\Filament\Editor\Resources\Applicants\ApplicantResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Support\Enums\Width;
@@ -19,7 +19,7 @@ class ListApplicants extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            // CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

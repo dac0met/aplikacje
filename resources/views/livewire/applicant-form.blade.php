@@ -74,35 +74,35 @@
                 </div>
             </div>  {{-- linia na dole bloku --}}
 
-            {{-- ==== Nasz własny Checkbox‑list ==== --}}
+            {{-- ==== Nasz własny Checkbox-list ==== --}}
             <div class="mt-4">
                 <div class="flex items-center gap-2">
                     <label class="block text-base font-medium text-gray-900 dark:text-white">Position applied for:<span class="text-red-600 dark:text-red-500 text-base"> *</span></label>
-                    <span class="text-sm text-gray-700 dark:text-gray-300">selected: {{ $this->selectedCount }}/{{ $maxPositions ?? 3 }}</span>
                 </div>
-                <span class="text-gray-900 dark:text-gray-300 text-sm italic">select 1 to 3 items</span>
+                {{-- <span class="text-gray-900 dark:text-gray-300 text-sm italic">select 1 to 3 items</span> --}}
                 @foreach ($jobPositions as $position)
                 @php
                     $disableThis = ($this->selectedCount >= ($maxPositions ?? 3)) && !in_array($position->id, $selected_job_positions ?? []);
-                @endphp
+                    @endphp
                 <div class="flex gap-3 mt-2">
                     <div class="flex items-center h-6 shrink-0">
                         <div class="grid grid-cols-1 group size-4">
                             <input
-                                type="checkbox"
-                                value="{{ $position->id }}"
-                                wire:model.live="selected_job_positions"
-                                wire:change="enforceMaxPositions" 
-                                id="job-position-{{ $position->id }}"
-                                @if($disableThis) disabled title="You can select up to 3 positions" @endif
-                                class="col-start-1 row-start-1 border rounded appearance-none bg-white dark:bg-gray-700 checked:border-indigo-500 checked:bg-indigo-500 indeterminate:border-indigo-500 indeterminate:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 forced-colors:appearance-auto{{ $disableThis ? ' opacity-50 cursor-not-allowed' : '' }}" />
+                            type="checkbox"
+                            value="{{ $position->id }}"
+                            wire:model.live="selected_job_positions"
+                            wire:change="enforceMaxPositions" 
+                            id="job-position-{{ $position->id }}"
+                            @if($disableThis) disabled title="You can select up to 3 positions" @endif
+                            class="col-start-1 row-start-1 border rounded appearance-none bg-white dark:bg-gray-700 checked:border-indigo-500 checked:bg-indigo-500 indeterminate:border-indigo-500 indeterminate:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 forced-colors:appearance-auto{{ $disableThis ? ' opacity-50 cursor-not-allowed' : '' }}" />
                         </div>
                     </div>
-                        <label for="job-position-{{ $position->id }}" class="block font-medium text-gray-900 dark:text-white select-none text-sm/6">
-                            {{ $position->name }}
-                        </label>
+                    <label for="job-position-{{ $position->id }}" class="block font-medium text-gray-900 dark:text-white select-none text-sm/6">
+                        {{ $position->name }}
+                    </label>
                 </div>
                 @endforeach
+                <span class="text-sm italic text-gray-600 dark:text-gray-400">selected positions: {{ $this->selectedCount }}/{{ $maxPositions ?? 3 }}</span>
 
                 @error('selected_job_positions') <p class="mt-1 text-red-600">{{ $message }}</p> @enderror
             </div>

@@ -22,8 +22,8 @@ return new class extends Migration
             $table->text('lastname');
             $table->smallInteger('yob')->nullable();	//Year Of Birth
             $table->string('city', 30)->nullable();
-            $table->bigInteger('phone')->nullable();
-            $table->string('email', 50)->nullable();
+            $table->text('phone')->nullable();
+            $table->text('email')->nullable();
             $table->string('position', 191)->nullable();
             $table->string('consent', 10)->nullable();	// zgoda na pracę zmianową
             $table->string('education', 30)->nullable();

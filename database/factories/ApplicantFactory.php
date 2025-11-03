@@ -24,13 +24,14 @@ class ApplicantFactory extends Factory
         $salary = [5000, 5500, 6000, 6500, 12000, 7200, 9600,7700, 8500, 4500];
 
         // Generujemy losowy numer telefonu (międzynarodowy format)
-        $phone = $this->faker->unique()->numberBetween(500000000, 799999999);
+        $phone = (string) $this->faker->unique()->numberBetween(500000000, 799999999);
 
         return [
             'job_position_id'  => $this->faker->numberBetween(1, 9),
             'consent_source_id'=> $this->faker->numberBetween(1, 2),
             'submitted_date'   => $this->faker->dateTimeBetween('-1 year', 'now'),
             'user_ip'          => $this->faker->ipv4,
+            'confirmation'     => $this->faker->boolean,
             'firstname'             => $this->faker->firstName,
             'lastname'          => $this->faker->lastName,
             'yob'              => $this->faker->numberBetween(1950, 2005),

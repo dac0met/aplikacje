@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Admin\Resources\ConsentSources\Schemas;
+namespace App\Filament\Editor\Resources\ConsentSources\Schemas;
 
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;

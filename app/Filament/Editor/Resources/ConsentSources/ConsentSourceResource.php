@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Filament\Admin\Resources\ConsentSources;
+namespace App\Filament\Editor\Resources\ConsentSources;
 
-use App\Filament\Admin\Resources\ConsentSources\Pages\CreateConsentSource;
-use App\Filament\Admin\Resources\ConsentSources\Pages\EditConsentSource;
-use App\Filament\Admin\Resources\ConsentSources\Pages\ListConsentSources;
-use App\Filament\Admin\Resources\ConsentSources\Schemas\ConsentSourceForm;
-use App\Filament\Admin\Resources\ConsentSources\Schemas\ConsentSourceInfolist;
-use App\Filament\Admin\Resources\ConsentSources\Tables\ConsentSourcesTable;
-use App\Models\ConsentSource;
+use App\Filament\Editor\Resources\ConsentSources\Pages\CreateConsentSource;
+use App\Filament\Editor\Resources\ConsentSources\Pages\EditConsentSource;
+use App\Filament\Editor\Resources\ConsentSources\Pages\ListConsentSources;
+use App\Filament\Editor\Resources\ConsentSources\Schemas\ConsentSourceForm;
+use App\Filament\Editor\Resources\ConsentSources\Tables\ConsentSourcesTable;
 use BackedEnum;
+use App\Models\ConsentSource;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -19,18 +18,13 @@ class ConsentSourceResource extends Resource
 {
     protected static ?string $model = ConsentSource::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::ArchiveBoxArrowDown;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'Name';
+    protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Schema $schema): Schema
     {
         return ConsentSourceForm::configure($schema);
-    }
-
-    public static function infolist(Schema $schema): Schema
-    {
-        return ConsentSourceInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table

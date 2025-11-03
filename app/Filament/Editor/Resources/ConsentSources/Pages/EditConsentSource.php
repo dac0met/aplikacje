@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Filament\Admin\Resources\ConsentSources\Pages;
+namespace App\Filament\Editor\Resources\ConsentSources\Pages;
 
-use App\Filament\Admin\Resources\ConsentSources\ConsentSourceResource;
+use App\Filament\Editor\Resources\ConsentSources\ConsentSourceResource;
 use Filament\Actions\DeleteAction;
-// use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditConsentSource extends EditRecord
@@ -14,7 +13,6 @@ class EditConsentSource extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            // ViewAction::make(),
             DeleteAction::make(),
         ];
     }

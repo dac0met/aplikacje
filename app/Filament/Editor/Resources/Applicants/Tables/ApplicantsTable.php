@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Admin\Resources\Applicants\Tables;
+namespace App\Filament\Editor\Resources\Applicants\Tables;
 
 use App\Models\Applicant;
 use App\Traits\GeneratesSearchHashes;
@@ -33,7 +33,7 @@ class ApplicantsTable
 
     public static function configure(Table $table): Table
     {
-        $tableKey = 'admin.applicants';
+        $tableKey = 'editor.applicants';
         $visible = app(TablePreferences::class)->getVisibleColumns(Auth::id(), $tableKey);
 
         return $table
@@ -52,15 +52,6 @@ class ApplicantsTable
                     ->label('IP')
                     ->toggleable(isToggledHiddenByDefault: ! in_array('user_ip', $visible))
                     ->limit(15),
-
-                IconColumn::make('confirmation')
-                    ->label('Confirmed')
-                    ->boolean()
-                    ->trueIcon('heroicon-o-check-circle')
-                    ->falseIcon('heroicon-o-x-circle')
-                    ->alignCenter()
-                    ->toggleable(isToggledHiddenByDefault: ! in_array('confirmation', $visible))
-                    ->sortable(),
 
                 TextColumn::make('submitted_date')
                     ->label('Submitted')
@@ -264,15 +255,8 @@ class ApplicantsTable
 
             ])->paginated([5, 10, 25, 50])
             ->defaultSort('id','DESC')
-            ->modifyQueryUsing(fn (Builder $query) => $query->with('jobPositions'))
+            ->modifyQueryUsing(fn (Builder $query) => $query->where('confirmation', true)->with('jobPositions'))
             ->filters([
-                TernaryFilter::make('confirmation')
-                    ->label('Confirmation')
-                    ->queries(
-                        true: fn (Builder $query) => $query->where('confirmation',true),
-                        false: fn (Builder $query) => $query->where('confirmation',false),
-                    ),
-
                 Filter::make('firstname_search')
                     ->label('Search by first name')
                     ->columnSpan(2)
@@ -361,30 +345,30 @@ class ApplicantsTable
                         false: fn (Builder $query) => $query->where('shift_work',false),
                     ),
 
-                Filter::make('created_from')
-                    ->label('Created from')
+                Filter::make('submitted_from')
+                    ->label('Submitted from')
                     ->columnSpan(2)
                     ->schema([
-                        DatePicker::make('created_from'),
+                        DatePicker::make('submitted_from'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
                             ->when(
-                                $data['created_from'],
+                                $data['submitted_from'],
                                 fn (Builder $query, $date): Builder => $query->whereDate('submitted_date', '>=', $date),
                             );
                     }),
 
-                Filter::make('created_until')
-                    ->label('Created until')
+                Filter::make('submitted_until')
+                    ->label('Submitted to')
                     ->columnSpan(2)
                     ->schema([
-                        DatePicker::make('created_until'),
+                        DatePicker::make('submitted_until'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
                             ->when(
-                                $data['created_until'],
+                                $data['submitted_until'],
                                 fn (Builder $query, $date): Builder => $query->whereDate('submitted_date', '<=', $date),
                             );
                     }),
@@ -416,7 +400,6 @@ class ApplicantsTable
                             ->options([
                                 'id' => 'ID',
                                 'user_ip' => 'IP',
-                                'confirmation' => 'Confirmed',
                                 'submitted_date' => 'Submitted',
                                 'firstname' => 'First Name',
                                 'lastname' => 'Last Name',

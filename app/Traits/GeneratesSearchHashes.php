@@ -97,7 +97,7 @@ trait GeneratesSearchHashes
 
         // Generujemy hash dla prefiksów (pierwsze 3, 4, 5 znaków z znormalizowanego tekstu)
         if (!empty($normalized)) {
-            for ($i = 3; $i <= min(5, strlen($normalized)); $i++) {
+            for ($i = 3; $i <= min(7, strlen($normalized)); $i++) {
                 $prefix = substr($normalized, 0, $i);
                 $hashes[] = $this->generateSearchHash($prefix);
             }
@@ -171,7 +171,7 @@ trait GeneratesSearchHashes
 
         // Generujemy hash dla prefiksów (pierwsze 3, 4, 5 znaków z znormalizowanego tekstu)
         if (!empty($normalized)) {
-            for ($i = 3; $i <= min(5, strlen($normalized)); $i++) {
+            for ($i = 3; $i <= min(7, strlen($normalized)); $i++) {
                 $prefix = substr($normalized, 0, $i);
                 $hashes[] = static::generateSearchHashStatic($prefix);
             }

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 // use Illuminate\Database\Eloquent\Concerns\HasRelationships;
 
 class Applicant extends Model
@@ -29,9 +30,6 @@ class Applicant extends Model
         'firstname',
         'lastname',
         'name',
-        'firstname_search_hashes',
-        'lastname_search_hashes',
-        'name_search_hashes',
         'yob',
         'city',
         'phone',
@@ -69,8 +67,8 @@ class Applicant extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->encryptedAttributes = ['firstname', 'lastname', 'name'];
-        $this->searchableAttributes = ['firstname', 'lastname', 'name'];
+        $this->encryptedAttributes = ['firstname', 'lastname', 'name', 'email', 'phone'];
+        $this->searchableAttributes = ['firstname', 'lastname', 'name', 'email', 'phone'];
     }
 
     public function consentSource() : BelongsTo
@@ -91,89 +89,7 @@ class Applicant extends Model
             'job_position_id');
     }
 
-    /** @return string */
-    public function getPositionsAttribute(): string
-    {
-        return $this->jobPositions
-            ->pluck('name')
-            ->join("\n");       // nowa linia – idealna dla Textarea
-    }
-
-    /**
-     * Mutator dla firstname - automatycznie generuje hash wyszukiwania
-     */
-    public function setFirstnameAttribute($value)
-    {
-        $this->attributes['firstname'] = $value;
-        if (!empty($value)) {
-            $hashes = $this->generatePartialSearchHashes($value);
-            $this->attributes['firstname_search_hashes'] = $this->hashesToString($hashes);
-        } else {
-            $this->attributes['firstname_search_hashes'] = null;
-        }
-        
-        // Aktualizujemy pole name i jego hash
-        $this->updateNameAndHashes();
-    }
-
-    /**
-     * Mutator dla lastname - automatycznie generuje hash wyszukiwania
-     */
-    public function setLastnameAttribute($value)
-    {
-        $this->attributes['lastname'] = $value;
-        if (!empty($value)) {
-            $hashes = $this->generatePartialSearchHashes($value);
-            $this->attributes['lastname_search_hashes'] = $this->hashesToString($hashes);
-        } else {
-            $this->attributes['lastname_search_hashes'] = null;
-        }
-        
-        // Aktualizujemy pole name i jego hash
-        $this->updateNameAndHashes();
-    }
-
-    /**
-     * Mutator dla name - automatycznie generuje hash wyszukiwania
-     */
-    public function setNameAttribute($value)
-    {
-        // Zapisujemy wartość name do bazy danych
-        $this->attributes['name'] = $value;
-        
-        // Generujemy hash dla wyszukiwania
-        if (!empty($value)) {
-            $hashes = $this->generatePartialSearchHashes($value);
-            $this->attributes['name_search_hashes'] = $this->hashesToString($hashes);
-        } else {
-            $this->attributes['name_search_hashes'] = null;
-        }
-    }
-
-    /**
-     * Aktualizuje pole name i jego hash na podstawie firstname i lastname
-     */
-    protected function updateNameAndHashes()
-    {
-        $firstname = $this->attributes['firstname'] ?? '';
-        $lastname = $this->attributes['lastname'] ?? '';
-        
-        if (!empty($firstname) || !empty($lastname)) {
-            $fullName = trim($firstname . ' ' . $lastname);
-            
-            // Zapisujemy pełne imię i nazwisko do pola name
-            $this->attributes['name'] = $fullName;
-            
-            // Generujemy hash dla wyszukiwania
-            $hashes = $this->generatePartialSearchHashes($fullName);
-            $this->attributes['name_search_hashes'] = $this->hashesToString($hashes);
-        } else {
-            $this->attributes['name'] = null;
-            $this->attributes['name_search_hashes'] = null;
-        }
-    }
-
-    /**
+     /**
      * Accessor dla firstname - zwraca zdeszyfrowaną wartość
      */
     public function getFirstnameAttribute($value)
@@ -187,6 +103,16 @@ class Applicant extends Model
     public function getLastnameAttribute($value)
     {
         return $this->getDecryptedAttribute('lastname');
+    }
+
+    public function getEmailAttribute($value)
+    {
+        return $this->getDecryptedAttribute('email');
+    }
+
+    public function getPhoneAttribute($value)
+    {
+        return $this->getDecryptedAttribute('phone');
     }
 
     /**
@@ -220,12 +146,17 @@ class Applicant extends Model
             return $query;
         }
 
-        $searchHashes = static::generatePartialSearchHashesStatic($searchText);
-        
-        return $query->where(function ($q) use ($searchHashes) {
-            foreach ($searchHashes as $hash) {
-                $q->orWhere('firstname_search_hashes', 'LIKE', '%' . $hash . '%');
-            }
+        $normalized = static::normalizeTextForSearchStatic($searchText);
+        if (strlen($normalized) < 3) {
+            return $query; // nie filtrujemy poniżej 3 znaków
+        }
+
+        $prefixLen = min(7, strlen($normalized));
+        $prefix = substr($normalized, 0, $prefixLen);
+        $hash = static::generateSearchHashStatic($prefix);
+
+        return $query->whereHas('searchHashes', function ($q) use ($hash) {
+            $q->where('field', 'firstname')->where('hash', $hash);
         });
     }
 
@@ -238,12 +169,17 @@ class Applicant extends Model
             return $query;
         }
 
-        $searchHashes = static::generatePartialSearchHashesStatic($searchText);
-        
-        return $query->where(function ($q) use ($searchHashes) {
-            foreach ($searchHashes as $hash) {
-                $q->orWhere('lastname_search_hashes', 'LIKE', '%' . $hash . '%');
-            }
+        $normalized = static::normalizeTextForSearchStatic($searchText);
+        if (strlen($normalized) < 3) {
+            return $query; // nie filtrujemy poniżej 3 znaków
+        }
+
+        $prefixLen = min(7, strlen($normalized));
+        $prefix = substr($normalized, 0, $prefixLen);
+        $hash = static::generateSearchHashStatic($prefix);
+
+        return $query->whereHas('searchHashes', function ($q) use ($hash) {
+            $q->where('field', 'lastname')->where('hash', $hash);
         });
     }
 
@@ -256,51 +192,109 @@ class Applicant extends Model
             return $query;
         }
 
-        $searchHashes = static::generatePartialSearchHashesStatic($searchText);
-        
-        return $query->where(function ($q) use ($searchHashes) {
-            foreach ($searchHashes as $hash) {
-                $q->orWhere('firstname_search_hashes', 'LIKE', '%' . $hash . '%')
-                  ->orWhere('lastname_search_hashes', 'LIKE', '%' . $hash . '%')
-                  ->orWhere('name_search_hashes', 'LIKE', '%' . $hash . '%');
-            }
+        $normalized = static::normalizeTextForSearchStatic($searchText);
+        if (strlen($normalized) < 3) {
+            return $query; // nie filtrujemy poniżej 3 znaków
+        }
+
+        $prefixLen = min(7, strlen($normalized));
+        $prefix = substr($normalized, 0, $prefixLen);
+        $hash = static::generateSearchHashStatic($prefix);
+
+        return $query->where(function ($q) use ($hash) {
+            $q->whereHas('searchHashes', fn ($qq) => $qq->where('field', 'firstname')->where('hash', $hash))
+              ->orWhereHas('searchHashes', fn ($qq) => $qq->where('field', 'lastname')->where('hash', $hash))
+              ->orWhereHas('searchHashes', fn ($qq) => $qq->where('field', 'name')->where('hash', $hash));
         });
     }
 
-    /**
-     * Metoda testowa do debugowania hash wyszukiwania
-     */
-    public static function testSearchHashes($searchText)
+    public function scopeSearchByEmail($query, $searchText)
     {
-        $applicant = new self();
-        $hashes = $applicant->generatePartialSearchHashes($searchText);
-        
-        \Log::info("Test search for: '{$searchText}'");
-        \Log::info("Generated hashes: " . implode(', ', $hashes));
-        
-        // Sprawdźmy czy istnieją rekordy z tymi hash
-        $query = self::query();
-        foreach ($hashes as $hash) {
-            $query->orWhere('firstname_search_hashes', 'LIKE', '%' . $hash . '%')
-                  ->orWhere('lastname_search_hashes', 'LIKE', '%' . $hash . '%');
+        if (empty($searchText)) {
+            return $query;
         }
-        
-        $results = $query->get();
-        \Log::info("Found {$results->count()} results");
-        
-        return [
-            'search_text' => $searchText,
-            'hashes' => $hashes,
-            'results_count' => $results->count(),
-            'results' => $results->pluck('id')->toArray()
-        ];
+
+        $normalized = static::normalizeTextForSearchStatic($searchText);
+        if (strlen($normalized) < 3) {
+            return $query;
+        }
+
+        $prefixLen = min(7, strlen($normalized));
+        $prefix = substr($normalized, 0, $prefixLen);
+        $hash = static::generateSearchHashStatic($prefix);
+
+        return $query->whereHas('searchHashes', function ($q) use ($hash) {
+            $q->where('field', 'email')->where('hash', $hash);
+        });
     }
 
-    // protected static function booted()
-    // {
-    //     static::creating(function ($applicant) {
-    //         \Log::debug('Applicant data before save', $applicant->attributesToArray());
-    //     });
-    // }
+    public function scopeSearchByPhone($query, $searchText)
+    {
+        if (empty($searchText)) {
+            return $query;
+        }
+
+        $normalized = static::normalizeTextForSearchStatic($searchText);
+        if (strlen($normalized) < 3) {
+            return $query;
+        }
+
+        $prefixLen = min(7, strlen($normalized));
+        $prefix = substr($normalized, 0, $prefixLen);
+        $hash = static::generateSearchHashStatic($prefix);
+
+        return $query->whereHas('searchHashes', function ($q) use ($hash) {
+            $q->where('field', 'phone')->where('hash', $hash);
+        });
+    }
+
+    protected static function booted()
+    {
+        static::created(function (self $applicant) {
+            $applicant->syncSearchHashes();
+        });
+
+        static::updated(function (self $applicant) {
+            $applicant->syncSearchHashes();
+        });
+    }
+
+    public function searchHashes(): HasMany
+    {
+        return $this->hasMany(\App\Models\ApplicantSearchHash::class);
+    }
+
+    protected function syncSearchHashes(): void
+    {
+        $fields = [
+            'firstname' => $this->firstname ?? null,
+            'lastname'  => $this->lastname ?? null,
+            'name'      => $this->name ?? trim(($this->firstname ?? '') . ' ' . ($this->lastname ?? '')),
+            'email'     => $this->email ?? null,
+            'phone'     => $this->phone ?? null,
+        ];
+
+        foreach ($fields as $field => $value) {
+            $this->searchHashes()->where('field', $field)->delete();
+
+            if (empty($value)) {
+                continue;
+            }
+
+            $hashes = static::generatePartialSearchHashesStatic($value);
+            if (empty($hashes)) {
+                continue;
+            }
+
+            $rows = array_map(function ($hash) use ($field) {
+                return [
+                    'field' => $field,
+                    'hash'  => $hash,
+                ];
+            }, $hashes);
+
+            $this->searchHashes()->createMany($rows);
+        }
+    }
 
 }
