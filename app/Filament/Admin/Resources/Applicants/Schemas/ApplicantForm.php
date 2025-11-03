@@ -30,9 +30,9 @@ class ApplicantForm
                 // ******** obszar informacyjny ***********************************
 
                         Radio::make('confirmation')
-                        ->boolean()
-                        ->inline(true)
-                        ->default(true),
+                            ->boolean()
+                            ->inline(true)
+                            ->default(true),
                         
                         TextInput::make('user_ip')
                             ->columnspan(1)

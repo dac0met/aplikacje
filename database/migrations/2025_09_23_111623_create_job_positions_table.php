@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('job_positions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('published')->default(false);
             $table->string('filename')->nullable();
+            $table->text('contents')->nullable();
             $table->timestamps();
         });
     }

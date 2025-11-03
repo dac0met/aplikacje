@@ -16,7 +16,9 @@ class JobPosition extends Model
      */
     protected $fillable = [
         'name',
+        'published',
         'filename',
+        'contents',
     ];
 
     public function applicants() : BelongsToMany     // na frondendzie

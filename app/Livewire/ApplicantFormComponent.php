@@ -344,7 +344,7 @@ class ApplicantFormComponent extends Component
     public function mount()
     {
         // Pobieramy tylko potrzebne kolumny, aby nie obciążać pamięci
-        $this->jobPositions = JobPosition::orderBy('name')->get(['id', 'name']);
+        $this->jobPositions = JobPosition::where('published', 1)->orderBy('name')->get(['id', 'name']);
         $this->generateCaptcha();
     }
 
