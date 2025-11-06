@@ -11,6 +11,8 @@ use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class JobPositionsTable
 {
@@ -37,8 +39,42 @@ class JobPositionsTable
 
                 TextColumn::make('filename')
                     ->label('Filename')
-                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->url(function ($record) {
+                        $fileBase = Str::of($record->name)->snake('_');
+                        $finalName = (string) ($record->filename ?: (string) $fileBase);
+                        if (!Str::of($finalName)->endsWith('.pdf')) { $finalName .= '.pdf'; }
+                        $relativePath = 'job_descriptions/' . $finalName;
+                        return Storage::disk('public')->exists($relativePath)
+                            ? route('job-positions.pdf', $record)
+                            : null; //brak pliku - link nieaktywny
+                    })
+                    ->openUrlInNewTab()
+                    ->extraAttributes([
+                        'class' => 'text-blue-600 hover:underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300'
+                    ])
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->searchable(),
+
+                // TextColumn::make('filename')
+                //     ->label('Filename')
+                //     ->formatStateUsing(function ($state, $record) {
+                //         $fileBase = Str::of($record->name)->snake('_');
+                //         $finalName = (string) ($record->filename ?: (string) $fileBase);
+                //         if (!Str::of($finalName)->endsWith('.pdf')) { $finalName .= '.pdf'; }
+                //         $relativePath = 'job_descriptions/' . $finalName;
+
+                //         if (!Storage::disk('public')->exists($relativePath)) {
+                //             return e($state);
+                //         }
+
+                //         $url = route('job-positions.pdf', $record);
+                //         $text = e($state);
+                //         return "<a href=\"{$url}\" target=\"_blank\" rel=\"noopener\" class=\"text-blue-600 hover:underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300\">{$text}</a>";
+                //     })
+                //     ->html()
+                //     ->toggleable(isToggledHiddenByDefault: false)
+                //     ->searchable(),
+
                     
                 TextColumn::make('created_at')
                     ->dateTime()

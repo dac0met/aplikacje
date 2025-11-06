@@ -19,6 +19,21 @@ class JobPosition extends Model
         'published',
         'filename',
         'contents',
+        'lang',
+        'looking_for_candidates',
+        'location',
+        'job_description',
+        'key_responsibilities',
+        'resp_items_text',
+        'our_requirements',
+        'req_items_text',
+        'we_offer',
+        'offer_items_text',
+        'option2_title',
+        'option1',
+        'option2',
+        'option3',
+
     ];
 
     public function applicants() : BelongsToMany     // na frondendzie

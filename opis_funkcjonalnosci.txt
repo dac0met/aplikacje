@@ -1,0 +1,30 @@
+
+Rozbuduj bieżący projekt o nastepującą funkcjonalność: tworzenie treści ogłoszeń na zapleczu oraz ich prezentację na frontendzie. Technologi: Livewire 3.x , Filament 4.x, Tailwindcss 
+
+Z poziomu paneli Admin i Editor ma być dostępny "Edytor ogłoszeń".
+"Edytor ogłoszeń" ma pozwalać na utworzenie ogłoszenia wg wzorca zamieszczonego w pliku announcement-template.blade.php.
+Ogłoszenia mogą być w języku angielskim lub polskim - wskazany byłby jakiś przełącznik języka treści.
+W miejscu zmiennej $lookingForCandidates użytkownik ma mieć do wyboru tekst "We are looking for candidates on the position of" lub "Poszukujemy kandydatów do pracy na stanowisku".
+W miejscu zmiennej $nameOfThePosition użytkownik wpisze nazwę stanowiska pracy. Nazwa ta będzie przekazywana do pola 'name' w tabeli job_positions oraz posłuży do zapisu nazwy pliku - w miejsce $file_name - w formacie pdf wg konwencji snake_case.
+W miejscu zmiennej $lacation domyślnie ma być do wyboru "Location: Bydgoszcz" lub "Miejsce pracy: Bydgoszcz" lub możliwość wpisania dowolnego tekstu.
+W miejscu zmiennej $keyResponsibilities ma być puste pole tekstowe z placeholderem 'Key responsibilities'.
+W miejscu zmiennej $ourRequirements ma być puste pole tekstowe z placeholderem 'Our requirements'.
+W miejscu zmiennej $weOffer ma być puste pole tekstowe z placeholderem 'We offers'.
+W miejscu zmiennych $option1, $option2, $option3 mają być puste pola tekstowe. Jeżeli nie zostaną wypełnione to na formularzu nie ma być żadnych tagów.
+Ilość pozycji w listach <ul> może być różna.
+W miejscu zmiennej $clauses wyświetlany ma być kod znajdujący się w plikach: clauses_cv_gb.blade.php (dla języka angielskiego) lub clauses_cv_pl.blade.php (dla języka polskiego) z folderu resources/views/clauses.
+Na dole ogłoszenia ma znajdować się obrazek z folderu /public/pdf48x48.png będący linkiem do lokalizacji pliku $file_name.
+
+Treść całego ogłoszenia ma być zapisywana w polu 'contents' tabeli job_positions. 
+Osobny przycisk ma służyć do wygenerowania pliku pdf z treścią ogłoszenia. Przykład pliku z ogłoszeniem customer_service_specialist_with_foreign_languages.pdf znajduje się w folderze /starage/app/public/job_descriptions
+
+
+Frontend
+
+Ogłoszenia ze statusem 'published = true' mają być wyświetlane pod adresem: domena_główna/job-offers
+
+Sposób wyświetlania: nazwy stanowisk pracy $nameOfThePosition mają być wyświetlane jako accordion component. Kliknięcie na nazwę stanowiska ma rozwinąć treść ogłoszenia dla danej pozycji.
+Przykład rozwiniętej pozycji akordeonu z istniejącej aplikacji znajduje się w pliku w dołączonym pliku accordion.png.
+Stylowanie zgodne z formularzem applicant-form.blade.php
+
+

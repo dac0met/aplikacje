@@ -1,9 +1,9 @@
 <div >
     <p>
-        <strong>Please fill out the</strong><br><br>
+        <strong>Please fill out the</strong>
         <a href="https://form.dacomet.pl" target="_blank" rel="noopener noreferrer"> 
-        <button class="px-3 py-2 text-sm font-semibold text-white bg-amber-600 hover:bg-amber-500 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"> application form </button></a>
-        <strong><br><br>and add one of the following clauses in your CV:</strong>
+        <button class="text-sm font-semibold text-white bg-amber-600 hover:bg-amber-500 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"> application form </button></a>
+        <strong>and add one of the following clauses in your CV:</strong>
     </p>
 </div>
 
