@@ -19,7 +19,7 @@ class ConsentSourceResource extends Resource
 {
     protected static ?string $model = ConsentSource::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::ArchiveBoxArrowDown;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::CodeBracket;
 
     protected static ?string $recordTitleAttribute = 'Name';
 
